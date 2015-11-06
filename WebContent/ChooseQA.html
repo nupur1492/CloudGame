@@ -1,0 +1,60 @@
+<!DOCTYPE HTML>
+<html>
+
+	<head lang="en">
+	<meta charset="UTF-8">
+	<meta name="author" content="EA Interns 2015 | Gamification Team">
+	<meta name="description" content ="Game As A Service">
+	
+	<title>ChooseQA | Game As A Service</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	
+	<link rel="stylesheet" href="stylesheets/ChooseQA.css">
+	
+	<!-- <script src="jquery-1.5.2.min.js"></script> -->
+	
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+	</head>
+  
+	<body>
+		<script type='text/javascript'>
+		  function changeColor(divObj) {
+         	divObj.style.background="gray"
+   		}   
+		</script> 
+
+	<form method="get" action="gameController">
+		<div id="page"> 
+			<h2>Please select the quality attribute(s) relevant to your problem.</h2>
+			<div class="qa" onclick="changeColor(this)">
+				<h2>Availability</h2>
+				<p>Quality attribute definition goes here. </p>
+			</div>
+			<div class="qa" onclick="changeColor(this)">
+				<h2>Security</h2>
+				<p>Quality attribute definition goes here. </p>
+			</div>
+			<div class="qa" onclick="changeColor(this)">
+				<h2>Performance</h2>
+				<p>Quality attribute definition goes here. </p>
+			</div>
+			<div class="qa" onclick="changeColor(this)">
+				<h2>Integrability</h2>
+				<p>Quality attribute definition goes here. </p>
+			</div>
+			<div class="qa" onclick="changeColor(this)">
+				<h2>Scalability</h2>
+				<p>Quality attribute definition goes here. </p>
+			</div>
+
+			<input type="hidden" name="check" value="1" id="check"/>
+			<div>
+				<input id="submit" type="submit" value="Begin the game!"/>
+			</div>
+			
+		</div>
+		</form>
+		
+	</body> 
+	
+</html>

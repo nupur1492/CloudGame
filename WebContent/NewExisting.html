@@ -1,0 +1,222 @@
+<!DOCTYPE HTML>
+<html>
+
+	<head lang="en">
+	<meta charset="UTF-8">
+	<meta name="author" content="EA Interns 2015 | Gamification Team">
+	<meta name="description" content ="Game As A Service">
+	
+	<title>New-Existing | Game As A Service</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
+	<link rel="stylesheet" href="stylesheets/New-Existing.css" title="NE">
+	<link rel="alternate stylesheet" href="stylesheets/ChooseQA.css" title="QA">
+	
+	
+	<script src="jquery-1.5.2.min.js"></script>
+	<script src="javascripts/angular.js"></script>
+	<script src="javascripts/sprite.js" type="text/javascript"></script>
+	<script src="javascripts/testBoard.js"></script>
+	<script src="javascripts/NewExisting.js"></script>
+	<script type="text/javascript" src="javascripts/styleswitcher.js"></script>
+	
+
+	<!-- <script src="app.js"></script> -->
+
+	</head>
+  
+	<body>	
+		<div class="header">
+			<img src="Logo1.png" alt="logo" align="center" id="titlePic"/>
+		</div>
+		<span id="NorE" class="spaces">
+			<!-- <span id="welcomeTitle" style="display:none;"><h2>What do you want to do today, </h2></span>
+			<br/>
+		</span>
+		<span id="NorE" class="spaces" > -->
+			<label><button id="newGame" type= "New" class="btn btn-default btn-lg" style= "margin-right:15%">New Project</button></label>
+			<label><button id="existingGame" type= "Existing" class="btn btn-default btn-lg" style= "margin-left:30%">Existing Project</button></label>
+		
+		</span>
+		<span id="NName" style="display:none;">
+			<form role="form">
+				<div class="form-group">
+					<label for="gameName">Game Name </label>
+					<input type="text" class="form-control" id="gameName">
+					<label for="gameDes">Game Description </label>
+					<input type="text" class="form-control" id="gameDes">
+				</div>
+				<!-- <input type="submit" name="submit" id="submit" value="Submit"/> -->
+			</form>
+				<br>
+				<br>
+				<button name="submit" id="NNameSumbit" class="btn btn-default" style= "margin-left:35%">Save</button>
+				<button id="NBack" type="reset" class="btn btn-default" style= "margin-left:10%">Cancel</button>
+		</span>
+		
+		<span id="NQA" style="display:none;">
+		<h2>Please select all the quality attributes relevant to your problem, then click on 'Play'</h2>
+		<div id="page">
+		<table class="table" id="QATable">
+		<col width="120">
+		<col width="120">
+		<col width="120">
+		<col width="120">
+			<tr>
+				<td width="20%">
+					<div class="qa" id="QA1" value="3">
+						<h2 title="Quality attribute definition goes here">Availability</h2>
+					</div>
+				</td>
+				
+				<td width="20%" >
+					<div class="qa" id="QA2" value="1">
+						<h2 title="Quality attribute definition goes here">Security</h2>
+					</div>
+				</td>
+				
+				<td width="20%">
+					<div class="qa" id="QA3" value="2">
+						<h2 title="Quality attribute definition goes here">Performance</h2>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td width="20%">
+					<div class="qa" id="QA4" value="4">
+						<h2 title="Quality attribute definition goes here">Integrability</h2>
+					</div>
+				</td>
+				<td width="20%">
+					<div class="qa" id="QA5" value="5">
+						<h2 title="Quality attribute definition goes here">Scalability</h2>
+					</div>
+				</td>
+				<td width="20%">
+					<div class="qa" id="QA6" value="6">
+						<h2 title="Quality attribute definition goes here">Maintainability</h2>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td width="20%">
+					<div class="qa1" id="diasbled7" value="7">
+						<h2 title="Quality attribute definition goes here">Quality Attribute</h2>
+					</div>
+				</td>
+				<td width="20%">
+					<div class="qa1" id="diasbled8" value="8">
+						<h2 title="Quality attribute definition goes here">Quality Attribute</h2>
+					</div>
+				</td>
+				<td width="20%">
+					<div class="qa1" id="diasbled9" value="9">
+						<h2 title="Quality attribute definition goes here">Quality Attribute</h2>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td width="20%">
+					<div class="qa1" id="diasbled10" value="10">
+						<h2 title="Quality attribute definition goes here">Quality Attribute</h2>
+					</div>
+				</td>
+				<td width="20%">
+					<div class="qa1" id="diasbled11" value="11">
+						<h2 title="Quality attribute definition goes here">Quality Attribute</h2>
+					</div>
+				</td>
+				<td width="20%">
+					<div class="qa1" id="diasbled12" value="12">
+						<h2 title="Quality attribute definition goes here">Quality Attribute</h2>
+					</div>
+				</td>
+			</tr>
+		</table>
+		
+		<!-- <div id="play"> -->
+			<!-- <button name="submit" id="NQASubmit" style="height:50px; width:250px"> -->
+			<input type="image" src="images/play.png" id="NQASubmit" class="play">
+			<!-- <img src="images/play.png" class="play" /> -->
+			<!-- <button name="back" id="NQABack" style="height:50px; width:250px"> -->
+			<input type="image" src="images/back.png" id="NQABack" class="back"/>
+
+	</div>
+	</span>
+			<!--  <div id="page">
+				<h2>Please select all the quality attributes relevant to your problem, then press the "Begin the Game!" button.</h2>
+				<div class="qa" id="QA1" value="3">
+					<h2>Availability</h2>
+					<p>Quality attribute definition goes here. </p>
+				</div>
+				<div class="qa" id="QA2" value="1">
+					<h2>Security</h2>
+					<p>Quality attribute definition goes here. </p>
+				</div>
+				<div class="qa" id="QA3" value="2">
+					<h2>Performance</h2>
+					<p>Quality attribute definition goes here. </p>
+				</div>
+				<div class="qa" id="QA4" value="4">
+					<h2>Integrability</h2>
+					<p>Quality attribute definition goes here. </p>
+				</div>
+				<div class="qa" id="QA5" value="5">
+					<h2>Scalability</h2>
+					<p>Quality attribute definition goes here. </p>
+				</div>
+				<div class="qa" id="QA6" value="6">
+					<h2>Maintainability</h2>
+					<p>Quality attribute definition goes here. </p>
+				</div>-->
+				
+				
+				
+
+		<div id="EChoose" style="display:none;" ng-app="GameApp" ng-controller="dataController"> 
+				<!-- Print the list of games, using angular or injection -->
+				 <table class="table" id="table">
+		 	 		<thead>
+		  	 			<tr>
+						<th ng-click="sortBy('name')" id="nameTitle">Name of Game</th>
+						<th ng-click="sortBy('des')" id="descriptionTitle">Game Description</th>
+						<th ng-click="sortBy('description')" id="descriptionTitle">Game Description</th>
+						<th ng-click="sortBy('completed')" id="completedTitle">Completed?</th>
+						</tr>
+					</thead>
+		   	 		<tbody>
+		  	 	    	<tr ng-repeat="row in games = (filteredGames | filter : {title: searchString} | orderBy : sortCol : sortReverse) track by $index"> 
+							<td id="name">{{row.name}}</td>
+							<td id="description">{{row.des}}</td>
+							<td id="completed">{{row.completed}}</td>
+							<td id="select"><button name="submit" id=ESelect{{row.id}} class="btn btn-default" value={{row.id}} ng-disabled="isLoading()" ng-click="selectGame(row.id)">Select</button></td>
+			    		</tr> 
+			    	</tbody> 
+				</table> 
+				<span id="noneFound" style="display:none;"><h3>It seems you haven't played any games yet. Press the back button and start a new project!</h3>
+					<br/><br/><br/><br/><br/>
+				</span>
+				<div>
+					<button name="back" id="ECBack" class="btn btn-default" >Back</button>
+				</div>
+		</div>
+		<div id="game" style="display:none;">
+			<figure>
+				<div style="width: 100%; overflow: hidden;">
+					<div id="app" style="float: left; position:relative;margin-top: 0%" >
+						 <canvas name="game" id="interface" width="1440" height="1200" style="border:1px dotted;"></canvas>
+					</div>
+					<div style="margin-left: 1480px;">
+						<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
+						<p class="FGText" style="font-size: 20px;"><B>You can add notes to questions you answer for your reference here.</B></p>
+						<input type="text"  id="userComments" maxlength="75" size="35">
+					</div>
+				</div>
+			</figure>
+			<div class="FGText">This game used icons by <a href="http://www.freepik.com" title="Freepik">Freepik</a> and <a href="http://www.typicons.com" title="Stephen Hutchings">Stephen Hutchings</a> from <a href="http://www.flaticon.com" title="Flaticon">www.flaticon.com</a> are licensed under <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0">CC BY 3.0</a></div>
+		</div>
+		
+	</body> 
+	
+</html>

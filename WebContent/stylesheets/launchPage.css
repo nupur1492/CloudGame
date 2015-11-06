@@ -1,0 +1,19 @@
+@import url(http://fonts.googleapis.com/css?family=Open+Sans:400,600,400italic);
+
+#game {
+	background-image: url("http://www.thewallpapers.org/get/25030/2560x1600");
+	background-size: cover;
+	width: 1425px;
+	height: 1055px;
+	float: left;
+	position:relative;
+}
+.header img {
+  width: 1325px;
+  height: 950px;
+  text-align: center;
+  vertical-align: middle;
+  margin-left: 250px;
+  margin-right: 250px;
+  
+}

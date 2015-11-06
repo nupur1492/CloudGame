@@ -1,0 +1,53 @@
+<!DOCTYPE HTML>
+
+<html>
+<head>
+<title>Game As A Service</title>
+
+<div class="header">
+			<h2 id="heada">Here is the Spider Chart of each cloud's performance:</h2>
+</div>
+
+<link href="stylesheets/Chart.css" media="all" rel="stylesheet"
+	type="text/css" />
+
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" />
+
+<script 
+	src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"
+	type="text/javascript"></script>
+
+<script src="javascripts/Chart.js"
+	type="text/javascript"></script>
+	
+	<script src="javascripts/SpiderChart.js"></script>
+
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
+</head>
+
+
+<body bgcolor="#ffaa00">
+	</br>
+	<div id="chartDiv">
+		<div class="container-fluid">
+			<div class="row" id="chartDiv">
+				<!-- <div class="col-md-8" id="coin-count"></div> -->	
+				<canvas id="canvasChart" width="1200" height="850"></canvas>
+			</div>
+		</div>
+		</br>
+		<div style="width: 100%; overflow: hidden;">
+		    <div id="js-legend" class="chart-legend" style="width: 600px; float: left;">Click on each name to see the cloud's performance.</div>
+		    <div id="cloudDesc" style="margin-left: 620px;"></div>
+		</div>
+	</div>
+	<div id="qDiv" style="display:none;">
+	</div>
+	<button name="submit" id="SCBack" class="btn btn-default" >Back to Menu</button>
+	<button name="submit" id="SCSwitch" class="btn btn-default" >View Answered Questions</button>
+	</body>
+</html>
+	

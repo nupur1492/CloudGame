@@ -1,0 +1,87 @@
+@import url(http://fonts.googleapis.com/css?family=Open+Sans:400,600,400italic);
+
+body {
+	background-image: url("clouds.png");
+}
+#page { 
+	font-family: 'Open Sans', sans-serif;
+	text-align: center; 
+	padding: 1%;
+}
+
+.table{
+	width:60%;
+	margin-left:3%;	
+}
+
+.play{
+	
+	margin-left:1%;
+	margin-top:8%;
+	padding: 1%;	
+}
+
+.back{
+	margin-left:2%;
+	margin-top:8%;
+	padding: 1%;
+}
+
+.qa {
+	width: 100%;
+	border: 3px solid gray;
+	margin: 1%;
+	padding: 1%;
+	display: inline-block;
+	cursor: pointer;
+	background-color: white;
+}
+
+.qa1{
+	width: 100%;
+	border: 3px solid gray;
+	margin: 1%;
+	padding: 1%;
+	display: inline-block;
+	cursor: pointer;
+	background-color: white;
+}
+
+.qa {
+	border: 3px solid gray;
+	margin: 4%;
+	padding: 3%;
+	display: inline-block;
+	cursor: pointer;
+	background-color: white;
+}
+
+.qa:hover {
+	background-color: gray;
+}
+
+.btn {
+	text-align: center;
+}
+
+.big-btn {
+    width: 300px;
+    height: 80px;
+}
+
+.FGText{
+	color: #FFFFFF;
+}
+
+a:link {
+    color: #00FF00;
+}
+a:visited {
+    color: #00ffff;
+}
+a:hover {
+    color: #acff88;
+}
+a:active {
+    color: #008080;
+}

@@ -1,0 +1,27 @@
+@import url(http://fonts.googleapis.com/css?family=Open+Sans:400,600,400italic);
+
+body {
+	font-family: 'Open Sans', sans-serif;
+	margin-top: 2%;
+	margin-left: 35%; 
+	margin-right: 35%;
+	background-color: #cccccc;
+}
+
+h1 {
+	text-align: center;
+}
+
+
+.header img {
+  float: center;
+  width: 500px;
+  height: 300px;
+}
+
+.header h1 {
+  position: relative;
+  top: 80px;
+  left: 10px;
+  float: center;
+}
