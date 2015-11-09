@@ -682,6 +682,7 @@ function openBetMenu(type){
 }
 function openTextMenu(type){
 	if(type == 0){ // facts/tips
+		//call tips stored procedure
 		if(tipsArray.length > 0){
 			var num = 0;
 			console.log(tipsArray);

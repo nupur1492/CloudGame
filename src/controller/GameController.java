@@ -321,7 +321,7 @@ public class GameController extends HttpServlet {
 					.setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE).create();
 			
 
-			cStmt = conn.prepareCall("{CALL spNewGame(?)}");
+			cStmt = conn.prepareCall("{CALL spGetTips(?)}");
 			System.out.println(cStmt);
 			cStmt.setString(4, qaArray);
 
