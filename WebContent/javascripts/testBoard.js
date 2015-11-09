@@ -21,8 +21,8 @@ var MAX_BONUS_SQUARES = 8;
 var showBonus = 0; // The number of turns bonus squares are drawn on the board ("Show Bonus Squares" event)
 var bonusCount = 0; // Keeps track of the # bonus squares that are landed on in a turn
 //var lowEvents = ["Facts and Tips", "Current News", "Show Bonus Squares", "Guess Which Cloud is First", "Get Coins"]; // News is not in DB yet
-//var lowEvents = ["Facts and Tips", "Show Bonus Squares", "Guess Which Cloud is First", "Get Coins"];
-var lowEvents = ["Facts and Tips", "Facts and Tips"]; 
+var lowEvents = ["Facts and Tips", "Show Bonus Squares", "Guess Which Cloud is First", "Get Coins"];
+//var lowEvents = ["Facts and Tips", "Facts and Tips"]; 
 var midEvents = ["Guess Which Cloud is First", "Change Your Bet", "Get Coins"];
 var lastEvent = "none";
 //var newsArray = ["A cloud just walked into a bar. It dissolved into precipitation.", "Three clouds were seen suspiciously loitering around a tobacco store.", "Prince Cumulus and Princess Cirrostratus have set their wedding day to July of 2016."];
@@ -237,12 +237,12 @@ function screenElem(color, sprite, x, y, width, height, hasText, text, textOffse
 }
 
 // Screen elements for the HUD
-var HUD = new screenElem("#8fefbf", null, 0, 0, 1432, 60, false, null, null, null, null, null);
+var HUD = new screenElem("#8fefbf", null, 4, 4, 1432, 60, false, null, null, null, null, null);
 var menuButton = new screenElem("#000066", null, 1374, 30, 60, 34, true, "Menu", 9, 22, "bold 16px sans-serif", "#FFFFFF");
 var helpButton = new screenElem("#000066", null, 1310, 30, 60, 34, true, "Help", 12, 22, "bold 16px sans-serif", "#FFFFFF");
 
 // Screen elements for the questions in the center of the board
-var quesBG = new screenElem("#FFFFFF", null, 248, 336, 994, 584, false, null, null, null, null, null);
+var quesBG = new screenElem("#FFFFFF", null, 248, 336, 934, 584, false, null, null, null, null, null);
 var quesTitle = new screenElem("#99ff99", null, 715, 360, 894, 100, true, "", 0, 66, "bold 64px sans-serif", "#000000"); // 859 max text length 40
 
 var star1 = new piece("star1", 342, 608, 100, "wstar", "0", "120", "255");
@@ -693,7 +693,7 @@ function openTextMenu(type){
 				num += 1;
 			}
 			console.log(num);
-			if(num < QList.length){
+			if(num < tipsArray.length){
 				bonusText1.text = tipsArray[num].TipName;
 				bonusText2.text = tipsArray[num].TipDescription;
 				tipsArray.splice(num, 1);

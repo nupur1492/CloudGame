@@ -77,9 +77,9 @@ public class GameController extends HttpServlet {
 			String username = request.getParameter("LANID");
 			String gameName = request.getParameter("gameName");
 			String gameDesc = request.getParameter("gameDesc");
-			String qaArray = request.getParameter("QAArray");
+			//String qaArray = request.getParameter("QAArray");
 
-			out.write(gson.toJson(newGame(username, gameName, gameDesc, qaArray)));
+			out.write(gson.toJson(newGame(username, gameName, gameDesc)));
 		}
 
 		
@@ -104,6 +104,14 @@ public class GameController extends HttpServlet {
 			String username = request.getParameter("LANID");
 			String gameId = request.getParameter("gameID");
 			out.write(gson.toJson(loadGame(username, gameId)));
+		}
+		
+		
+		/*************** call tips stored procedure ***************/
+		else if (fn.equals("5")) {
+			String qaArray = request.getParameter("QAArray");
+
+			out.write(gson.toJson(getTips(qaArray)));
 		}
 
 	} // end of doGet
@@ -171,7 +179,7 @@ public class GameController extends HttpServlet {
 
 	/*************** new game function ****************/
 
-	private static JsonArray newGame(String username, String gameName, String gameDesc, String qaArray) {
+	private static JsonArray newGame(String username, String gameName, String gameDesc) {
 		Connection conn = null;
 		CallableStatement cStmt = null;
 		JsonArray array = new JsonArray();
@@ -190,7 +198,7 @@ public class GameController extends HttpServlet {
 			cStmt.setString(1, username);
 			cStmt.setString(2, gameName);
 			cStmt.setString(3, gameDesc);
-			cStmt.setString(4, qaArray);
+			//cStmt.setString(4, qaArray);
 
 			cStmt.execute();
 			rs1 = cStmt.getResultSet();
@@ -204,10 +212,10 @@ public class GameController extends HttpServlet {
 				elem.addProperty("AnswerValue", rs1.getString("AnswerValue"));
 				elem.addProperty("ModelID", rs1.getString("ModelID"));
 				elem.addProperty("ModelAnswerValue", rs1.getString("ModelAnswerValue"));
-				elem.addProperty("TipID", rs1.getString("TipID"));
+				/*elem.addProperty("TipID", rs1.getString("TipID"));
 				elem.addProperty("TipName", rs1.getString("TipName"));
 				elem.addProperty("TipDescription", rs1.getString("TipDescription"));
-				elem.addProperty("TipQA", rs1.getString("TipQA"));
+				elem.addProperty("TipQA", rs1.getString("TipQA"));*/
 				elem.addProperty("GameID", rs1.getString("GameID"));
 				array.add(elem);
 				// System.out.println(gson.toJson(elem));
@@ -273,6 +281,64 @@ public class GameController extends HttpServlet {
 			array.add(elem);
 			
 			//rs1.close();
+			cStmt.close();
+			conn.close();
+			return array;
+
+		} catch (SQLException se) {
+			se.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (cStmt != null)
+					cStmt.close();
+			} catch (SQLException se2) {
+			}
+			try {
+				if (conn != null) {
+					conn.close();
+				}
+			} catch (SQLException se) {
+				se.printStackTrace();
+			}
+		}
+		return null;
+	}
+	
+	/********************* get tips ********************/
+	private static JsonArray getTips(String qaArray) {
+		Connection conn = null;
+		CallableStatement cStmt = null;
+		JsonArray array = new JsonArray();
+		ResultSet rs1;
+
+		try {
+			Class.forName(JDBC_DRIVER);
+			System.out.println("Connecting to database...");
+			conn = DriverManager.getConnection(DB_URL, USER, PASS);
+			Gson gson = new GsonBuilder().setPrettyPrinting().serializeNulls()
+					.setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE).create();
+			
+
+			cStmt = conn.prepareCall("{CALL spNewGame(?)}");
+			System.out.println(cStmt);
+			cStmt.setString(4, qaArray);
+
+			cStmt.execute();
+			rs1 = cStmt.getResultSet();
+
+			while (rs1.next()) {
+				JsonObject elem = new JsonObject();
+				elem.addProperty("TipID", rs1.getString("TipID"));
+				elem.addProperty("TipName", rs1.getString("TipName"));
+				elem.addProperty("TipDescription", rs1.getString("TipDescription"));
+				elem.addProperty("TipQA", rs1.getString("TipQA"));
+				
+				array.add(elem);
+			}
+
+			rs1.close();
 			cStmt.close();
 			conn.close();
 			return array;

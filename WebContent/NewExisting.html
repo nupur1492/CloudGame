@@ -30,13 +30,15 @@
 		<div class="header">
 			<img src="Logo1.png" alt="logo" align="center" id="titlePic"/>
 		</div>
+		
 		<span id="NorE" class="spaces">
+		<br><br>
 			<!-- <span id="welcomeTitle" style="display:none;"><h2>What do you want to do today, </h2></span>
 			<br/>
 		</span>
 		<span id="NorE" class="spaces" > -->
-			<label><button id="newGame" type= "New" class="btn btn-default btn-lg" style= "margin-right:15%">New Project</button></label>
-			<label><button id="existingGame" type= "Existing" class="btn btn-default btn-lg" style= "margin-left:30%">Existing Project</button></label>
+			<label><button id="newGame" type= "New" class="btn btn-default btn-lg" style= "margin-right:15%; margin-top: 10%;margin-left: 40%;">New Project</button></label>
+			<label><button id="existingGame" type= "Existing" class="btn btn-default btn-lg" style= "margin-left:50%; margin-top: 10%;">Existing Project</button></label>
 		
 		</span>
 		<span id="NName" style="display:none;">
@@ -56,13 +58,13 @@
 		</span>
 		
 		<span id="NQA" style="display:none;">
-		<h2>Please select all the quality attributes relevant to your problem, then click on 'Play'</h2>
+		<h2 style="font-size: 40px; color: #FFFFFF; text-align: center;">Please select all the quality attributes relevant to your problem, then click on 'Play'</h2>
 		<div id="page">
 		<table class="table" id="QATable">
+		<!-- <col width="120">
 		<col width="120">
 		<col width="120">
-		<col width="120">
-		<col width="120">
+		<col width="120"> -->
 			<tr>
 				<td width="20%">
 					<div class="qa" id="QA1" value="3">
@@ -101,34 +103,34 @@
 			</tr>
 			<tr>
 				<td width="20%">
-					<div class="qa1" id="diasbled7" value="7">
+					<div class="qa" id="diasbled7" value="7">
 						<h2 title="Quality attribute definition goes here">Quality Attribute</h2>
 					</div>
 				</td>
 				<td width="20%">
-					<div class="qa1" id="diasbled8" value="8">
+					<div class="qa" id="diasbled8" value="8">
 						<h2 title="Quality attribute definition goes here">Quality Attribute</h2>
 					</div>
 				</td>
 				<td width="20%">
-					<div class="qa1" id="diasbled9" value="9">
+					<div class="qa" id="diasbled9" value="9">
 						<h2 title="Quality attribute definition goes here">Quality Attribute</h2>
 					</div>
 				</td>
 			</tr>
 			<tr>
 				<td width="20%">
-					<div class="qa1" id="diasbled10" value="10">
+					<div class="qa" id="diasbled10" value="10">
 						<h2 title="Quality attribute definition goes here">Quality Attribute</h2>
 					</div>
 				</td>
 				<td width="20%">
-					<div class="qa1" id="diasbled11" value="11">
+					<div class="qa" id="diasbled11" value="11">
 						<h2 title="Quality attribute definition goes here">Quality Attribute</h2>
 					</div>
 				</td>
 				<td width="20%">
-					<div class="qa1" id="diasbled12" value="12">
+					<div class="qa" id="diasbled12" value="12">
 						<h2 title="Quality attribute definition goes here">Quality Attribute</h2>
 					</div>
 				</td>
@@ -204,13 +206,14 @@
 		<div id="game" style="display:none;">
 			<figure>
 				<div style="width: 100%; overflow: hidden;">
-					<div id="app" style="float: left; position:relative;margin-top: 0%" >
+					<div id="app" style="float: center; margin-top: 0%; margin-left: 15%" >
 						 <canvas name="game" id="interface" width="1440" height="1200" style="border:1px dotted;"></canvas>
 					</div>
-					<div style="margin-left: 1480px;">
-						<br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/><br/>
-						<p class="FGText" style="font-size: 20px;"><B>You can add notes to questions you answer for your reference here.</B></p>
-						<input type="text"  id="userComments" maxlength="75" size="35">
+					<div style="margin-left:30%;">
+						
+						<p class="FGText" style="font-size: 25px;"><B>You can add notes to questions you answer for your reference here.</B></p>
+						<textarea id="userComments" style="margin-left: 15%;"></textarea>
+						<!-- <input type="text"  id="userComments" maxlength="75" size="35"> -->
 					</div>
 				</div>
 			</figure>
