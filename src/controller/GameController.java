@@ -77,9 +77,9 @@ public class GameController extends HttpServlet {
 			String username = request.getParameter("LANID");
 			String gameName = request.getParameter("gameName");
 			String gameDesc = request.getParameter("gameDesc");
-			//String qaArray = request.getParameter("QAArray");
+			String qaArray = request.getParameter("QAArray");
 
-			out.write(gson.toJson(newGame(username, gameName, gameDesc)));
+			out.write(gson.toJson(newGame(username, gameName, gameDesc,qaArray)));
 		}
 
 		
@@ -179,7 +179,7 @@ public class GameController extends HttpServlet {
 
 	/*************** new game function ****************/
 
-	private static JsonArray newGame(String username, String gameName, String gameDesc) {
+	private static JsonArray newGame(String username, String gameName, String gameDesc,String qaArray) {
 		Connection conn = null;
 		CallableStatement cStmt = null;
 		JsonArray array = new JsonArray();
@@ -198,7 +198,7 @@ public class GameController extends HttpServlet {
 			cStmt.setString(1, username);
 			cStmt.setString(2, gameName);
 			cStmt.setString(3, gameDesc);
-			//cStmt.setString(4, qaArray);
+			cStmt.setString(4, qaArray);
 
 			cStmt.execute();
 			rs1 = cStmt.getResultSet();
@@ -323,7 +323,7 @@ public class GameController extends HttpServlet {
 
 			cStmt = conn.prepareCall("{CALL spGetTips(?)}");
 			System.out.println(cStmt);
-			cStmt.setString(4, qaArray);
+			cStmt.setString(1, qaArray);
 
 			cStmt.execute();
 			rs1 = cStmt.getResultSet();
@@ -408,10 +408,10 @@ public class GameController extends HttpServlet {
 				elem.addProperty("ModelID", rs1.getString("ModelID"));
 				elem.addProperty("ModelAnswerValue", rs1.getString("ModelAnswerValue"));
 				elem.addProperty("QualityAttributeName", rs1.getString("QualityAttributeName"));
-				elem.addProperty("TipID", rs1.getString("TipID"));
+				/*elem.addProperty("TipID", rs1.getString("TipID"));
 				elem.addProperty("TipName", rs1.getString("TipName"));
 				elem.addProperty("TipDescription", rs1.getString("TipDescription"));
-				elem.addProperty("TipQA", rs1.getString("TipQA"));
+				elem.addProperty("TipQA", rs1.getString("TipQA"));*/
 				array.add(elem);
 				// System.out.println(gson.toJson(elem));
 			}

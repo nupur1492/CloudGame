@@ -79,7 +79,7 @@ angular.module('GameApp', {})
         $.post("/game1.1/gameController", gameInfo, function(list) {
         	if(list != null){
         		console.log(list);
-	        	var indCloud = {}, indQues = {}, indTips = {}, cloudData = [], quesData = [], tipsData = [];
+	        	var indCloud = {}, indQues = {}, cloudData = [], quesData = [];
 			 	$.each(list, function(index, data) {
 					// Make an array that not only has the questions, but clouds, and user data
 					//ModelID, QualityAttributeID, cloudScore
@@ -119,11 +119,11 @@ angular.module('GameApp', {})
 						indQues[data.QuestionID] = {};
 						indQues[data.QuestionID][data.AnswerID] = [data.ModelID];
 					}
-					if(!indTips.hasOwnProperty(data.TipID)){
+					/*if(!indTips.hasOwnProperty(data.TipID)){
 						console.log(data.TipID);
 						tipsData.push(new tipInfo(parseInt(data.TipID), data.TipQA, data.TipName, data.TipDescription));
 						indTips[data.TipID] = 1;
-					}
+					}*/
 				});
 				GameID = gameID;
 				gameName = list[0].GameName;
@@ -140,9 +140,9 @@ angular.module('GameApp', {})
 				}
 				console.log(quesData);
 				console.log(cloudData);
-				console.log(tipsData);
+				//console.log(tipsData);
 				console.log(QAArray);
-				prepGame(quesData, tipsData, cloudData);
+				prepGame(quesData, cloudData);
 				setActiveStyleSheet('QA');
 				$("#titlePic").css("display", "none");
 				$("#EChoose").css("display", "none");
@@ -175,7 +175,7 @@ angular.module('GameApp', {})
 				if(list != null){
 					console.log(list);
 			    	GameID = parseInt(list[0].GameID);
-				 	var indQues = {}, indTips = {}, quesData = [], tipsData = [];
+				 	var indQues = {}, quesData = [];
 				 	$.each(list, function(index, data) {
 						//QuestionID, QuestionValue, AnswerID, AnswerValue, ModelID, ModelAnswerValue, QualityAttributeName
 						//quesInfo(id, title, qa, notes, asked)
@@ -201,19 +201,19 @@ angular.module('GameApp', {})
 							indQues[data.QuestionID] = {};
 							indQues[data.QuestionID][data.AnswerID] = [data.ModelID];
 						}
-						if(!indTips.hasOwnProperty(data.TipID)){
+						/*if(!indTips.hasOwnProperty(data.TipID)){
 							tipsData.push(new tipInfo(data.TipID, data.TipQA, data.TipName, data.TipDescription));
 							indTips[data.TipID] = 1;
-						}
+						}*/
 					});
 					modelBet = -1;
 					bet = -1;
 					playerCoins = 0;
-					prepGame(quesData, tipsData, null);
+					prepGame(quesData, null);
 					$("#NQA").css("display", "none");
 					$("#game").css("display", "");
 					console.log(quesData);
-					console.log(tipsData);
+					//console.log(tipsData);
 					input.disabled = false;
 				} else {
 					alert("The database is busy, try again later.");

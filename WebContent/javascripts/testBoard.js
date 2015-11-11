@@ -21,8 +21,8 @@ var MAX_BONUS_SQUARES = 8;
 var showBonus = 0; // The number of turns bonus squares are drawn on the board ("Show Bonus Squares" event)
 var bonusCount = 0; // Keeps track of the # bonus squares that are landed on in a turn
 //var lowEvents = ["Facts and Tips", "Current News", "Show Bonus Squares", "Guess Which Cloud is First", "Get Coins"]; // News is not in DB yet
-var lowEvents = ["Facts and Tips", "Show Bonus Squares", "Guess Which Cloud is First", "Get Coins"];
-//var lowEvents = ["Facts and Tips", "Facts and Tips"]; 
+//var lowEvents = ["Facts and Tips", "Show Bonus Squares", "Guess Which Cloud is First", "Get Coins"];
+var lowEvents = ["Facts and Tips", "Facts and Tips"]; 
 var midEvents = ["Guess Which Cloud is First", "Change Your Bet", "Get Coins"];
 var lastEvent = "none";
 //var newsArray = ["A cloud just walked into a bar. It dissolved into precipitation.", "Three clouds were seen suspiciously loitering around a tobacco store.", "Prince Cumulus and Princess Cirrostratus have set their wedding day to July of 2016."];
@@ -46,6 +46,7 @@ var QList = [];  // Holds the questions to be answered. Randomized for your conv
 var cloudString = [""]; // String representation of cloud array for saving to DB
 var qString = [""]; // String representation of questions array for saving to DB
 var currentSave = 0; // Determines which data to save (if case DB gives an unfavorable response)
+var tipsFlag = false;
 
 
 function piece(name, x, y, width,sprite, colorR, colorG, colorB) { // Function for creating the pieces in the game, as well as the floating position indicators
@@ -683,6 +684,37 @@ function openBetMenu(type){
 function openTextMenu(type){
 	if(type == 0){ // facts/tips
 		//call tips stored procedure
+		console.log(tipsFlag);
+		if(tipsFlag == false){
+			var QAString = "";
+			for(var i = 0; i < QAArray.length; i++){
+				QAString+=(QAArray[i])+",";
+				console.log("qaarray"+QAArray[i]);
+			}
+			console.log(QAString);
+			var gameInfo = {
+		    		fn : 5,
+					QAArray : QAString
+				};
+			$.post("/game1.1/gameController", gameInfo, function(list) {
+		    	console.log(QAString);
+				if(list != null){
+				 	$.each(list, function(index, data) {
+						//QuestionID, QuestionValue, AnswerID, AnswerValue, ModelID, ModelAnswerValue, QualityAttributeName
+						//quesInfo(id, title, qa, notes, asked)
+				 		tipsArray.push(new tipInfo(data.TipID, data.TipQA, data.TipName, data.TipDescription));
+					});
+					shuffle(tipsArray);	
+					console.log(tipsArray);
+					tipsFlag = true;
+					openTextMenu(0);
+				} else {
+					alert("Failed to load tips. The database is busy.");
+				}
+			});
+		}
+		//replace tipsArray with tipsData?
+		console.log(tipsArray.length);
 		if(tipsArray.length > 0){
 			var num = 0;
 			console.log(tipsArray);
@@ -892,7 +924,7 @@ function makeMove(array){ // TODO: character limit?
 	//getDB();
 }
 //$(document).ready(function() {
-function prepGame(qQues, qTips, qClouds){ // Function to run when starting the game.
+function prepGame(qQues, qClouds){ // Function to run when starting the game.
 	window.onbeforeunload = function(event) {
 		console.log(qString);
 		console.log(currentSave);
@@ -922,9 +954,6 @@ function prepGame(qQues, qTips, qClouds){ // Function to run when starting the g
 	console.log(QList);
 	totalQuestions = AList.length + QList.length;
 	questionAsked += AList.length;
-	tipsArray = qTips.slice();
-	shuffle(tipsArray);
-	console.log(tipsArray);
 	setBonusSquares(MAX_BONUS_SQUARES);
 	nextQuestion(); 
 	
