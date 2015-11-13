@@ -26,6 +26,7 @@ angular.module('GameApp', {})
     $scope.sortReverse = false;
     //$scope.$apply();
     $scope.loadGamesData = function() {
+    	var eButton = document.getElementById('existingGame');
         if ($scope.filteredGames == null) {
         	if(user == null || tempData == null){
         		window.location = "login.html";
@@ -47,6 +48,7 @@ angular.module('GameApp', {})
 						});
 					 	$scope.filteredGames = gamesData;
 					 	$scope.$apply();
+					 	eButton.disabled = false;
 					} else {
 						window.location = "login.html";
 					}
@@ -54,6 +56,8 @@ angular.module('GameApp', {})
 					alert("Unable to load your games. The database is busy.");
 				}
 			});
+        } else {
+        	eButton.disabled = false;
         }
     }
     $scope.loadGamesData();
