@@ -745,33 +745,34 @@ function openTextMenu(type){
 					alert("Failed to load tips. The database is busy.");
 				}
 			});
-		}
-		//replace tipsArray with tipsData?
-		console.log(tipsArray.length);
-		if(tipsArray.length > 0){
-			var num = 0;
-			console.log(tipsArray);
-			console.log(QList[curQues-1].QA);
-			console.log(tipsArray[0].QA);
-			while(num < tipsArray.length && QList[curQues-1].QA != tipsArray[num].QA && tipsArray[num].QA != "None"){
+		} else {
+			//replace tipsArray with tipsData?
+			console.log(tipsArray.length);
+			if(tipsArray.length > 0){
+				var num = 0;
+				console.log(tipsArray);
 				console.log(QList[curQues-1].QA);
-				console.log(tipsArray[num].QA);
-				num += 1;
-			}
-			console.log(num);
-			if(num < tipsArray.length){
-				bonusText1.text = tipsArray[num].TipName;
-				bonusText2.text = tipsArray[num].TipDescription;
-				tipsArray.splice(num, 1);
+				console.log(tipsArray[0].QA);
+				while(num < tipsArray.length && QList[curQues-1].QA != tipsArray[num].QA && tipsArray[num].QA != "None"){
+					console.log(QList[curQues-1].QA);
+					console.log(tipsArray[num].QA);
+					num += 1;
+				}
+				console.log(num);
+				if(num < tipsArray.length){
+					bonusText1.text = tipsArray[num].TipName;
+					bonusText2.text = tipsArray[num].TipDescription;
+					tipsArray.splice(num, 1);
+				} else {
+					bonusText1.text = "No tips to display for this question";
+					bonusText2.text = "Sorry!";
+				}
 			} else {
-				bonusText1.text = "No tips to display for this question";
+				bonusText1.text = "No more tips to display";
 				bonusText2.text = "Sorry!";
 			}
-		} else {
-			bonusText1.text = "No more tips to display";
-			bonusText2.text = "Sorry!";
 		}
-	} else { // news
+	}/* else { // news
 		if(newsArray.length > 0){
 			var num = Math.floor(Math.random() * newsArray.length);
 			bonusText1.text = "In current news:";
@@ -781,7 +782,7 @@ function openTextMenu(type){
 			bonusText1.text = "No more news to display";
 			bonusText2.text = "Sorry!";
 		}
-	}
+	}*/
 	dimOut.draw(); 
 	bonusBG.draw();
 	context.textAlign="center";
@@ -1404,8 +1405,10 @@ function prepGame(qQues, qClouds){ // Function to run when starting the game.
 	    		}
 	    	}
 	    } else if(mode == 6 || mode == 7){
-	    	mode = 0;
-	    	draw(positions, false);
+	    	if(tipsFlag){
+		    	mode = 0;
+		    	draw(positions, false);
+	    	}
 	    } else if(mode == 8){
 	    	if(chooseBG.clicked(mousePos.x, mousePos.y, false)){
 	    		for(var i in clouds){
