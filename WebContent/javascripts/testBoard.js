@@ -6,8 +6,8 @@ var container;
 var CANVAS_WIDTH = 1440;
 var CANVAS_HEIGHT = 1200;
 
-var heightRatio = 1;
-var widthRatio = 1;
+var newHeight = 1440;
+var newWidth = 1200;
 
 var mode = 4; // 0: normal, 1: help, 2: before event, 3: during event, 4: pregame help, 5: pregame select bet, 
 			  // 6: facts/tips display screen, 7: news display screen (if needed), 8: guess the cloud, 9: game over, 10 menu, 11 onLoad, 12 onLoad completeGame, 13 onLoad beforeStart
@@ -146,7 +146,13 @@ function piece(name, x, y, width,sprite, colorR, colorG, colorB) { // Function f
 		this.sprite.draw(context, this.x, this.y);
 	},
 	this.clicked = function(xCoord, yCoord){
-		if(Math.sqrt((xCoord-(this.x+(this.width/2)))*(xCoord-(this.x+(this.width/2))) + (yCoord-(this.y+(this.height/2)))*(yCoord-(this.y+(this.height/2)))) < this.width/2){
+		var wRatio = CANVAS_WIDTH / newWidth;
+		var hRatio = CANVAS_HEIGHT / newHeight;
+		var x = this.x / wRatio;
+		var y = this.y / hRatio;
+		var width = this.width / wRatio;
+		var height = this.height / hRatio;
+		if(Math.sqrt((xCoord-(x+(width/2)))*(xCoord-(x+(width/2))) + (yCoord-(y+(height/2)))*(yCoord-(y+(height/2)))) < width/2){
 			return true;
 		} else {
 			return false;
@@ -250,10 +256,12 @@ function screenElem(color, sprite, x, y, width, height, hasText, text, textOffse
 		}
 	}
 	this.clicked = function(xCoord, yCoord, detectCenter){
-		var x = this.x * widthRatio;
-		var y = this.y * heightRatio;
-		var width = this.width * widthRatio;
-		var height = this.height * heightRatio;
+		var wRatio = CANVAS_WIDTH / newWidth;
+		var hRatio = CANVAS_HEIGHT / newHeight;
+		var x = this.x / wRatio;
+		var y = this.y / hRatio;
+		var width = this.width / wRatio;
+		var height = this.height / hRatio;
 		
 		/*if(detectCenter){
 			if(this.x-(this.width/2) <= xCoord && xCoord <= this.x-(this.width/2)+this.width && this.y <= yCoord && yCoord <= this.y+this.height){
@@ -984,96 +992,25 @@ function prepGame(qQues, qClouds){ // Function to run when starting the game.
 		}
 	};
 	
-	
 	canvas = document.getElementById("interface");
 	context = canvas.getContext('2d');
 	container = document.getElementById("app");
 	
-	//var stretch_flag = false;
-
 	function resize_canvas(){
-		
-		//canvas = document.getElementById("interface");
-		//context = canvas.getContext('2d');
-		
-		
-		
 		console.log("resized");
-		
 		var ratio = canvas.width/canvas.height;
 		var newRatio = ratio;
-		
-		var newWidth = window.innerWidth;
-		var newHeight = window.innerHeight;
-		console.log("container"+container.style.width+".");
-		
-		var oldWidth;
-		var oldHeight;
-		
-		var oldContainerW = container.style.width.replace("px","");
-		var oldContainerH = container.style.height.replace("px","");
-		
-		if(oldContainerW == ""){
-			oldWidth = CANVAS_WIDTH;
-			
-		}else{
-		oldWidth = parseInt(container.style.width.replace('px',''));}
-		
-		if(oldContainerH == ""){
-			oldHeight = CANVAS_HEIGHT;
-		}else{
-		oldHeight = parseInt(container.style.height.replace('px',''));}
-
-		
-		console.log("old width "+oldWidth);
-		console.log("old height "+oldHeight);
-		
-		
-		widthRatio = newWidth/oldWidth;
-		console.log("width ratio "+ratioWidth);
-		
-		heightRatio = newHeight/oldHeight;
-		console.log("height ratio "+ ratioHeight);
-		
-		/*var x = menuButton.x;
-		
-		menuButton.x = x * ratioWidth;
-		menuButton.width = menuButton.width * ratioWidth;
-		
-		console.log("menu x "+menuButton.x);
-		var y = menuButton.y;
-		
-		menuButton.y = y * ratioHeight;
-		menuButton.height = menuButton.height * ratioHeight;*/
-
-		
-		//var oldToNew = newWidth/canvas.width;
-		
-			newRatio = newWidth/newHeight;
-		
-		
-		
+		newWidth = window.innerWidth;
+		newHeight = window.innerHeight;newRatio = newWidth/newHeight;
 		if(newRatio>ratio){
 			newWidth = newHeight * ratio;
 			container.style.width = newWidth + 'px';
 			container.style.height = newHeight + 'px';
-		}
-		else{
+		} else {
 			newHeight = newWidth/ratio;
 			container.style.width = newWidth + 'px';
 			container.style.height = newHeight + 'px';
 		}
-		//container.style.marginTop = (-newHeight/2) + 'px';
-		//container.style.marginLeft = (-newWidth/2) + 'px';
-		
-		//CANVAS_HEIGHT = newHeight;
-		//CANVAS_WIDTH = newWidth;
-		
-		/*console.log("newWidth " + newWidth);
-		console.log("newHeight "+newHeight);
-		console.log("new width "+ CANVAS_WIDTH);
-		console.log("new height "+ CANVAS_HEIGHT);*/
-		draw(null,false);
 	}
 
 	window.addEventListener('resize', function () {
@@ -1302,6 +1239,7 @@ function prepGame(qQues, qClouds){ // Function to run when starting the game.
 	    var y = Math.floor((evt.pageY-$("#interface").offset().top) / 20);
 		var mousePos = getMousePos(canvas, evt);
 	    var message = 'You Clicked: ' + mousePos.x + ',' + mousePos.y;
+	    //alert(message);
 	    /*context.fillStyle = "rgb(255,255,255)";
 	    context.fillRect(x*20, y*20, 20, 20);*/
 	    message += ". Position of square (20x20) on grid is: "+x*20+" "+y*20;
