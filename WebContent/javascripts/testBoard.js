@@ -2,8 +2,13 @@
 
 var canvas;
 var context;
+var container;
 var CANVAS_WIDTH = 1440;
 var CANVAS_HEIGHT = 1200;
+
+var heightRatio = 1;
+var widthRatio = 1;
+
 var mode = 4; // 0: normal, 1: help, 2: before event, 3: during event, 4: pregame help, 5: pregame select bet, 
 			  // 6: facts/tips display screen, 7: news display screen (if needed), 8: guess the cloud, 9: game over, 10 menu, 11 onLoad, 12 onLoad completeGame, 13 onLoad beforeStart
 var playerStartingCoins = 0; // The amount of coins the user has before starting the game
@@ -48,6 +53,29 @@ var qString = [""]; // String representation of questions array for saving to DB
 var currentSave = 0; // Determines which data to save (if case DB gives an unfavorable response)
 var tipsFlag = false;
 
+
+	
+	/*canvas.height = window.innerHeight;
+	//canvas.width = window.innerWidth;
+	context.height = window.innerHeight;
+	context.width = window.innerWidth;
+	console.log("resized height "+canvas.height);
+	console.log("resized width "+ canvas.width);
+	
+	CANVAS_HEIGHT = context.height;
+	CANVAS_WIDTH = context.width;
+	
+	/*if(CANVAS_HEIGHT < window.innerHeight){
+		CANVAS_HEIGHT = window.innerHeight;
+		console.log(CANVAS_HEIGHT);
+	}
+	if(CANVAS_WIDTH < window.innerWidth){
+		CANVAS_WIDTH = window.innerWidth;
+		console.log(CANVAS_WIDTH);
+	}
+	console.log("draw function");
+	draw(null, false);
+}*/
 
 function piece(name, x, y, width,sprite, colorR, colorG, colorB) { // Function for creating the pieces in the game, as well as the floating position indicators
     this.name = name;  
@@ -222,14 +250,31 @@ function screenElem(color, sprite, x, y, width, height, hasText, text, textOffse
 		}
 	}
 	this.clicked = function(xCoord, yCoord, detectCenter){
-		if(detectCenter){
+		var x = this.x * widthRatio;
+		var y = this.y * heightRatio;
+		var width = this.width * widthRatio;
+		var height = this.height * heightRatio;
+		
+		/*if(detectCenter){
 			if(this.x-(this.width/2) <= xCoord && xCoord <= this.x-(this.width/2)+this.width && this.y <= yCoord && yCoord <= this.y+this.height){
 				return true;
 			} else {
 				return false;
 			}
+		}*/
+		if(detectCenter){
+			if(x-(width/2) <= xCoord && xCoord <= x-(width/2)+width && y <= yCoord && yCoord <= y+height){
+				return true;
+			} else {
+				return false;
+			}
 		}
-		if(this.x <= xCoord && xCoord <= this.x+this.width && this.y <= yCoord && yCoord <= this.y+this.height){
+		/*if(this.x <= xCoord && xCoord <= this.x+this.width && this.y <= yCoord && yCoord <= this.y+this.height){
+			return true;
+		} else {
+			return false;
+		}*/
+		if(x <= xCoord && xCoord <= x+width && y <= yCoord && yCoord <= y+height){
 			return true;
 		} else {
 			return false;
@@ -237,12 +282,15 @@ function screenElem(color, sprite, x, y, width, height, hasText, text, textOffse
 	}
 }
 
+
+
 // Screen elements for the HUD
 var HUD = new screenElem("#8fefbf", null, 4, 4, 1432, 60, false, null, null, null, null, null);
 var menuButton = new screenElem("#000066", null, 1374, 30, 60, 34, true, "Menu", 9, 22, "bold 16px sans-serif", "#FFFFFF");
 var helpButton = new screenElem("#000066", null, 1310, 30, 60, 34, true, "Help", 12, 22, "bold 16px sans-serif", "#FFFFFF");
 
 // Screen elements for the questions in the center of the board
+//var quesBG = new screenElem("#FFFFFF", null, 248, 336, CANVAS_WIDTH*0.648, CANVAS_HEIGHT*0.486, false, null, null, null, null, null);
 var quesBG = new screenElem("#FFFFFF", null, 248, 336, 934, 584, false, null, null, null, null, null);
 var quesTitle = new screenElem("#99ff99", null, 715, 360, 894, 100, true, "", 0, 66, "bold 64px sans-serif", "#000000"); // 859 max text length 40
 
@@ -409,6 +457,8 @@ function draw(moveData, isMoving) {
 	background.src = "background.jpg";
 	background.onload = function() {
 		context.drawImage(background, 0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+		console.log(" draw height " + CANVAS_HEIGHT);
+		console.log(" draw width " + CANVAS_WIDTH);
 		// After background is drawn, draw the board TODO: Make the board parts not transparent so we can save time by just drawing the board to hide the pieces.
 		var board = new Image();
 		board.src = "board.png";
@@ -581,7 +631,7 @@ function checkBonus(){
 	    context.textAlign="center"; 
 	    context.font = "bold 80px sans-serif";
 	    bnsTitle.drawResize(false);
-	    context.textAlign="left"; 
+	    context.textAlign="left";
 	    mode = 2;
 	}
 	if(bonusSquares.length < 3){ // If there's not many BS left, add more. 
@@ -934,8 +984,159 @@ function prepGame(qQues, qClouds){ // Function to run when starting the game.
 		}
 	};
 	
+	
 	canvas = document.getElementById("interface");
 	context = canvas.getContext('2d');
+	container = document.getElementById("app");
+	
+	//var stretch_flag = false;
+
+	function resize_canvas(){
+		
+		//canvas = document.getElementById("interface");
+		//context = canvas.getContext('2d');
+		
+		
+		
+		console.log("resized");
+		
+		var ratio = canvas.width/canvas.height;
+		var newRatio = ratio;
+		
+		var newWidth = window.innerWidth;
+		var newHeight = window.innerHeight;
+		console.log("container"+container.style.width+".");
+		
+		var oldWidth;
+		var oldHeight;
+		
+		var oldContainerW = container.style.width.replace("px","");
+		var oldContainerH = container.style.height.replace("px","");
+		
+		if(oldContainerW == ""){
+			oldWidth = CANVAS_WIDTH;
+			
+		}else{
+		oldWidth = parseInt(container.style.width.replace('px',''));}
+		
+		if(oldContainerH == ""){
+			oldHeight = CANVAS_HEIGHT;
+		}else{
+		oldHeight = parseInt(container.style.height.replace('px',''));}
+
+		
+		console.log("old width "+oldWidth);
+		console.log("old height "+oldHeight);
+		
+		
+		widthRatio = newWidth/oldWidth;
+		console.log("width ratio "+ratioWidth);
+		
+		heightRatio = newHeight/oldHeight;
+		console.log("height ratio "+ ratioHeight);
+		
+		/*var x = menuButton.x;
+		
+		menuButton.x = x * ratioWidth;
+		menuButton.width = menuButton.width * ratioWidth;
+		
+		console.log("menu x "+menuButton.x);
+		var y = menuButton.y;
+		
+		menuButton.y = y * ratioHeight;
+		menuButton.height = menuButton.height * ratioHeight;*/
+
+		
+		//var oldToNew = newWidth/canvas.width;
+		
+			newRatio = newWidth/newHeight;
+		
+		
+		
+		if(newRatio>ratio){
+			newWidth = newHeight * ratio;
+			container.style.width = newWidth + 'px';
+			container.style.height = newHeight + 'px';
+		}
+		else{
+			newHeight = newWidth/ratio;
+			container.style.width = newWidth + 'px';
+			container.style.height = newHeight + 'px';
+		}
+		//container.style.marginTop = (-newHeight/2) + 'px';
+		//container.style.marginLeft = (-newWidth/2) + 'px';
+		
+		//CANVAS_HEIGHT = newHeight;
+		//CANVAS_WIDTH = newWidth;
+		
+		/*console.log("newWidth " + newWidth);
+		console.log("newHeight "+newHeight);
+		console.log("new width "+ CANVAS_WIDTH);
+		console.log("new height "+ CANVAS_HEIGHT);*/
+		draw(null,false);
+	}
+
+	window.addEventListener('resize', function () {
+	    resize_canvas();
+	}, false);
+
+	
+	// also resize the screen on orientation changes
+	/*window.addEventListener('orientationchange', function () {
+		resize_canvas();
+	}, false);*/
+
+	// draw the image on canvas
+	// note that you dont need to redraw on resize since the canvas element stays intact    
+	draw(null,false);
+
+	// first resize
+	//resize_canvas();
+	
+	
+	
+	/*window.addEventListener('load', resize_canvas(), false);
+	window.addEventListener('resize', resize_canvas(), false);
+	
+	function resize_canvas(){
+		
+		console.log("resized");
+		canvas.height = window.innerHeight;
+		canvas.width = window.innerHeight;
+		
+		
+		console.log("resize height "+ canvas.height);
+		if(canvas.height < window.innerHeight){
+			//CANVAS_HEIGHT = window.innerHeight;
+			canvas.height = window.innerHeight;
+			console.log(CANVAS_HEIGHT);
+			console.log("resize height "+ canvas.height);
+		}
+		if(CANVAS_WIDTH < window.innerWidth){
+			CANVAS_WIDTH = window.innerWidth;
+			console.log(CANVAS_WIDTH);
+		}
+		draw(null, false);
+		//drawPieces();
+	}
+	
+	resize_canvas();
+	/*function resize(){
+		
+		var height = window.innerHeight;
+		console.log("height "+ height);
+		var ratio = CANVAS_WIDTH/CANVAS_HEIGHT;
+		console.log("ratio "+ ratio);
+		var width = height * ratio;
+		console.log("width" + width);
+		
+		CANVAS_HEIGHT = height;
+		CANVAS_WIDTH = width;
+		console.log("resize  " + CANVAS_HEIGHT + "width " + CANVAS_WIDTH);
+		draw(null, false);
+	}*/
+	
+	
 	
 	console.log(gameName);
 	for(var k = 0; k < qQues.length; k++){

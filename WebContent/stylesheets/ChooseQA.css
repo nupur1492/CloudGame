@@ -9,6 +9,19 @@ body {
 	padding: 1%;
 }
 
+#app {
+    position: absolute;
+    float : center;
+    margin-top: 0%;
+    margin-left: 15%;
+    /*left: 50%;
+    top: 50%;*/
+}
+#interface{
+    width: 100%;
+    height: 100%;
+}
+
 .table{
 	width:60%;
 	margin-left:20%;	
@@ -86,3 +99,4 @@ a:hover {
 a:active {
     color: #008080;
 }
+
