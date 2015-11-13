@@ -335,36 +335,11 @@ var helpDesc01 =
 		"receive coins if you guess correctly. There are also bonus " +
 		"squares the pieces may land on, which leads to random " +
 		"events. ";
-/*var helpDesc02 = 
-<<<<<<< HEAD
-=======
-var helpDesc02 = 
->>>>>>> 32488006180bc92f045b0f8ccd8e78d6de5842fa
-=======
->>>>>>> refs/remotes/origin/Rick's-Branch
-	"Get Coins: Gain coins that can be used for betting on clouds." +
-	"                                                                                                  "+
-	"Facts and Tips: The game gives you interesting facts about clouds and tips for using cloud in your project." +
-	"                                                                                                                 "+
-	"Current News: The game provides you news about clouds to help you stay current." +
-	"           " +
-	"                                                                                                                                                     "+
-	"Show Bonus Squares: Shows you where the bonus squares are on the board." +
-	"                  " +
-	"                                                                                                                                                     "+
-	"Guess Which Cloud is First: Shows you what cloud the piece in 1st place represents and gives you coins if you guess correctly." +
-	"                            " +
-	"                                                                                                                                                     "+
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> refs/remotes/origin/Rick's-Branch
-	"Change Your Bet: Allows you to change the cloud and the amount you bet on.";*/
 var helpDesc02 = 
 	"Get Coins: Gain coins that can be used for betting on clouds." +
 	"                                                                                                  "+
 	"Facts and Tips: The game gives you interesting facts about clouds and tips for using cloud in your project." +
-	"                                                                                                                 "+
+	"                                                                                                                     "+
 	"Show Bonus Squares: Shows you where the bonus squares are on the board." +
 	"                  " +
 	"                                                                                                                                                     "+
@@ -1024,7 +999,8 @@ function prepGame(qQues, qClouds){ // Function to run when starting the game.
 	}, false);*/
 
 	// draw the image on canvas
-	// note that you dont need to redraw on resize since the canvas element stays intact    
+	// note that you dont need to redraw on resize since the canvas element stays intact 
+	resize_canvas();
 	draw(null,false);
 
 	// first resize
