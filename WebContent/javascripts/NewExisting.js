@@ -301,6 +301,19 @@ $(document).ready(function(){
 		$("#EChoose").css("display", "none");
 		$("#NorE").css("display", "");
 	});
+	
+	$('#gameName').keypress(function(e){
+		if(e.keyCode==13){
+			$('#NNameSumbit').click();
+			return false;
+		}
+	});
+	$('#gameDes').keypress(function(e){
+		if(e.keyCode==13){
+			$('#NNameSumbit').click();
+			return false;
+		}
+	});
 });
 function cloudInfo(id){
 	this.ModelID = id;

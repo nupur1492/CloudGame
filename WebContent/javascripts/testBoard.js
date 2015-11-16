@@ -52,6 +52,7 @@ var cloudString = [""]; // String representation of cloud array for saving to DB
 var qString = [""]; // String representation of questions array for saving to DB
 var currentSave = 0; // Determines which data to save (if case DB gives an unfavorable response)
 var tipsFlag = false;
+var selAnswer = -1;
 
 
 	
@@ -302,19 +303,20 @@ var helpButton = new screenElem("#000066", null, 1310, 30, 60, 34, true, "Help",
 var quesBG = new screenElem("#FFFFFF", null, 248, 336, 934, 584, false, null, null, null, null, null);
 var quesTitle = new screenElem("#99ff99", null, 715, 360, 894, 100, true, "", 0, 66, "bold 64px sans-serif", "#000000"); // 859 max text length 40
 
-var star1 = new piece("star1", 342, 608, 100, "wstar", "0", "120", "255");
-var star2 = new piece("star2", 492, 608, 100, "wstar", "0", "120", "255");
-var star3 =  new piece("star3", 642, 608, 100, "wstar", "0", "120", "255");
-var star4 = new piece("star4", 792, 608, 100, "wstar", "0", "120", "255");
-var star5 = new piece("star5", 942, 608, 100, "wstar", "0", "120", "255");     
+var star1 = new piece("star1", 352, 508, 100, "wstar", "0", "120", "255");
+var star2 = new piece("star2", 502, 508, 100, "wstar", "0", "120", "255");
+var star3 =  new piece("star3", 652, 508, 100, "wstar", "0", "120", "255");
+var star4 = new piece("star4", 802, 508, 100, "wstar", "0", "120", "255");
+var star5 = new piece("star5", 952, 508, 100, "wstar", "0", "120", "255");     
 var quesAnsw = [star1, star2, star3, star4, star5];		//white stars
 
-var star11 = new piece("star1", 342, 608, 100, "bstar", "0", "120", "255");
-var star12 = new piece("star2", 492, 608, 100, "bstar", "0", "120", "255");
-var star13 =  new piece("star3", 642, 608, 100, "bstar", "0", "120", "255");
-var star14 = new piece("star4", 792, 608, 100, "bstar", "0", "120", "255");
-var star15 = new piece("star5", 942, 608, 100, "bstar", "0", "120", "255");     
+var star11 = new piece("star1", 352, 508, 100, "bstar", "0", "120", "255");
+var star12 = new piece("star2", 502, 508, 100, "bstar", "0", "120", "255");
+var star13 =  new piece("star3", 652, 508, 100, "bstar", "0", "120", "255");
+var star14 = new piece("star4", 802, 508, 100, "bstar", "0", "120", "255");
+var star15 = new piece("star5", 952, 508, 100, "bstar", "0", "120", "255");     
 var quesAnsw2 = [star11, star12, star13, star14, star15];	//blue stars
+var ansButton = new screenElem("#000066", null, 615, 790, 200, 75, true, "Submit", 18, 52, "bold 46px sans-serif", "#FFFFFF");
 
 // Other elements
 var dimOut = new screenElem("rgba(211, 211, 211, 0.5)", null, 0, 0, CANVAS_WIDTH, CANVAS_HEIGHT, false, null, null, null, null, null);
@@ -467,18 +469,27 @@ function draw(moveData, isMoving) {
 			}
 			if(isMoving){
 				if(mode == 0){ 
-					checkBonus();
+					checkBonus(); 
 				}
 			}
-			if(mode == 4){
+			if(mode == 0){
+				$("#userComments").css("display", "");
+			} else if(mode == 4){
+				$("#userComments").css("display", "none");
 				openHelpMenu(1);
 			} else if(mode == 5){
+				$("#userComments").css("display", "none");
 				openBetMenu(0);
 			} else if(mode == 11 || mode == 13){
+				$("#userComments").css("display", "none");
 				openHelpMenu(1);
 			} else if(mode == 12){
+				$("#userComments").css("display", "none");
 				openEndMenu();
+			} else {
+				$("#userComments").css("display", "none");
 			}
+			//console.log($("#userComments").offset());console.log($("#userComments").position());console.log(document.getElementById('userComments').style.left); console.log(document.getElementById('userComments').style.top); 
 		};
 	};
 }
@@ -987,6 +998,12 @@ function prepGame(qQues, qClouds){ // Function to run when starting the game.
 			container.style.width = newWidth + 'px';
 			container.style.height = newHeight + 'px';
 		}
+		var wRatio = CANVAS_WIDTH / newWidth; // Resizing the text input element
+		var hRatio = CANVAS_HEIGHT / newHeight;
+		document.getElementById('userComments').style.left = (400 / wRatio)+"px";
+		document.getElementById('userComments').style.width = (630 / wRatio)+"px";
+		document.getElementById('userComments').style.top = (690 / hRatio)+"px";
+		document.getElementById('userComments').style.height = (35 / hRatio)+"px";
 	}
 
 	window.addEventListener('resize', function () {
@@ -1003,54 +1020,6 @@ function prepGame(qQues, qClouds){ // Function to run when starting the game.
 	// note that you dont need to redraw on resize since the canvas element stays intact 
 	resize_canvas();
 	draw(null,false);
-
-	// first resize
-	//resize_canvas();
-	
-	
-	
-	/*window.addEventListener('load', resize_canvas(), false);
-	window.addEventListener('resize', resize_canvas(), false);
-	
-	function resize_canvas(){
-		
-		console.log("resized");
-		canvas.height = window.innerHeight;
-		canvas.width = window.innerHeight;
-		
-		
-		console.log("resize height "+ canvas.height);
-		if(canvas.height < window.innerHeight){
-			//CANVAS_HEIGHT = window.innerHeight;
-			canvas.height = window.innerHeight;
-			console.log(CANVAS_HEIGHT);
-			console.log("resize height "+ canvas.height);
-		}
-		if(CANVAS_WIDTH < window.innerWidth){
-			CANVAS_WIDTH = window.innerWidth;
-			console.log(CANVAS_WIDTH);
-		}
-		draw(null, false);
-		//drawPieces();
-	}
-	
-	resize_canvas();
-	/*function resize(){
-		
-		var height = window.innerHeight;
-		console.log("height "+ height);
-		var ratio = CANVAS_WIDTH/CANVAS_HEIGHT;
-		console.log("ratio "+ ratio);
-		var width = height * ratio;
-		console.log("width" + width);
-		
-		CANVAS_HEIGHT = height;
-		CANVAS_WIDTH = width;
-		console.log("resize  " + CANVAS_HEIGHT + "width " + CANVAS_WIDTH);
-		draw(null, false);
-	}*/
-	
-	
 	
 	console.log(gameName);
 	for(var k = 0; k < qQues.length; k++){
@@ -1181,6 +1150,7 @@ function prepGame(qQues, qClouds){ // Function to run when starting the game.
 	    } else if(mode == 0){
 	    	for(var i = 0; i < quesAnsw.length; i++){
 	    		if(quesAnsw[i].clicked(mousePos.x,mousePos.y)){
+	    			selAnswer = i;
 	    			for(var j=0;j<quesAnsw.length;j++){
 	    				if(j <= i){
 	    					quesAnsw2[j].draw();
@@ -1231,20 +1201,21 @@ function prepGame(qQues, qClouds){ // Function to run when starting the game.
 		        	openHelpMenu(1);
 	        	}
 	        } else if(quesBG.clicked(mousePos.x, mousePos.y, false)){
-	        	for(var i = 0, len = quesAnsw.length; i < len; i++) {
-        			if(quesAnsw[i].clicked(mousePos.x, mousePos.y, false)){
-                		//var array = answerQuestion(i);
-        				var userTxt = document.getElementById('userComments').value;
-        				if(userTxt.indexOf("~") == -1 && userTxt.indexOf("|") == -1){
-        					QList[curQues].comment = userTxt;
-        					$("#userComments").val('');
-	                		makeMove(answerQuestion(i));
-        				} else {
-        					alert("Please remove special characters ~ and | from your comments below.");
-        				}
-            			break;
-                	}
-        		}
+	        	if(ansButton.clicked(mousePos.x, mousePos.y, false)){
+	        		if(selAnswer > -1 && selAnswer < 5){
+		        		var userTxt = document.getElementById('userComments').value;
+	    				if(userTxt.indexOf("~") == -1 && userTxt.indexOf("|") == -1){
+	    					QList[curQues].comment = userTxt;
+	    					$("#userComments").val('');
+	                		makeMove(answerQuestion(selAnswer));
+	    				} else {
+	    					alert("Please remove special characters ~ and | from your comments below.");
+	    				}
+		        		selAnswer = -1;
+	        		} else {
+	        			alert("Please select a rating before clicking the submit button.");
+	        		}
+	        	}
 	        }/* else {
 	        	for(var i in pieces) {
 	    			if(pieces[i].clicked(mousePos.x, mousePos.y)){
@@ -1520,7 +1491,7 @@ function answerQuestion(ans){ // Calculates how many spaces to move each piece
 		nextQuestion();
 	} else {
 		var pts = QList[curQues].answer[ans].points;
-		//console.log(pts);
+		console.log(pts); console.log(ans);
 		var arr = [];
 		for(var i = 0, len = pieces.length; i < len; i++){
 			var score = pts[cloudList.indexOf(pieces[i].cloud)];
@@ -1614,6 +1585,7 @@ function drawSquares() { // draw the screen elements
 	for(var i = 0, len = quesAnsw.length; i < len; i++) {
 		quesAnsw[i].draw();
 	}
+	ansButton.draw();
 	// Draw HUD elements
     context.font = 'bold 18pt Calibri';
     context.fillStyle = 'black';
