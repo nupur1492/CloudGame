@@ -41,88 +41,59 @@ $(document).ready(function() {
 		var ID = pair[1];
 		console.log(ID);console.log(query);console.log(vars);
 		if(ID == null){
-			// Stop the rest of the program and stuff TODO
+			$("#chartDiv").css("display", "none");
+			$("#loadFail").css("display", "");
 		} else {
-			// TODO grab code from newExising to sort into arrays!
-			
+			clouds = [];
+			QAs = [];
+			QList = [];
 			var credentials = {
 				fn : 8,
 				gameID: ID
 			};
 			$.post("/CloudGame/gameController", credentials, function(list) {
-				console.log(list);
+				//console.log(list);
 				if(list != null){
-					if(list.length > 0){
-						// Cloud: Name and QAScores IN ORDER! TODO edit getEndSummary SP to to this with comma separators using group concat
-						// Question: title, answer, notes
-						// QA: QA in order!
-					 	var indCloud = {}, indQues = {}, cloudData = [], quesData = [];
+					if(list.length > 0){var indCloud = {}, indQues = {};
 					 	$.each(list, function(index, data) {
-							// Make an array that not only has the questions, but clouds, and user data
-							//ModelID, QualityAttributeID, cloudScore
-							if(indCloud.hasOwnProperty(data.ModelID)){
-								if(indCloud[data.ModelID].indexOf(data.QualityAttributeID) == -1){
-									var ind = -1;for(var i = 0; i < cloudData.length; i++){ if(cloudData[i].ModelID == data.ModelID){ind = i; break;}}
-									cloudData[ind].ModelAnswerValue.push(parseInt(data.cloudScore));
-									indCloud[data.ModelID].push(data.QualityAttributeID);
-								}
-							} else {
-								cloudData.push(new cloudInfo(parseInt(data.ModelID))); // TODO: sort this array into one where the scores are in an array (like below)
-								cloudData[cloudData.length-1].ModelAnswerValue.push(parseInt(data.cloudScore));
-								indCloud[data.ModelID] = [data.QualityAttributeID]
-							}
-							//QuestionID, theAnswer, UserNotes, QuestionAsked, QuestionValue, AnswerID, AnswerValue, ModelID, ModelAnswerValue, QualityAttributeName
-							//quesInfo(id, title, qa, notes, asked)
-							if(indQues.hasOwnProperty(data.QuestionID)){
-								if(indQues[data.QuestionID].hasOwnProperty(data.AnswerID)){
-									if(indQues[data.QuestionID][data.AnswerID].indexOf(data.ModelID) == -1){ // Add new ModelID
-										var ind = -1;for(var i = 0; i < quesData.length; i++){ if(quesData[i].QuestionID == data.QuestionID){ind = i; break;}}
-										quesData[ind].AnswerValue.push(parseInt(data.ModelAnswerValue));
-										indQues[data.QuestionID][data.AnswerID].push(data.ModelID);
-									}
-								} else { // Add new answerID and ModelID
-									var ind = -1;for(var i = 0; i < quesData.length; i++){ if(quesData[i].QuestionID == data.QuestionID){ind = i; break;}}
-									quesData[ind].AnswerID.push(parseInt(data.AnswerID));
-									quesData[ind].AnswerTitle.push(parseInt(data.AnswerValue));
-									quesData[ind].AnswerValue.push(parseInt(data.ModelAnswerValue));
-									indQues[data.QuestionID][data.AnswerID] = [data.ModelID];
-								}
-							} else {
-								quesData.push(new quesInfo(parseInt(data.QuestionID), data.QuestionValue, data.QualityAttributeName, data.UserNotes, parseInt(data.QuestionAsked)));
-								if(data.QuestionAsked = 1){quesData[quesData.length-1].choice = parseInt(data.theAnswer);}
-								quesData[quesData.length-1].AnswerID.push(parseInt(data.AnswerID));
-								quesData[quesData.length-1].AnswerTitle.push(parseInt(data.AnswerValue));
-								quesData[quesData.length-1].AnswerValue.push(parseInt(data.ModelAnswerValue));
-								indQues[data.QuestionID] = {};
-								indQues[data.QuestionID][data.AnswerID] = [data.ModelID];
-							}
-							/*if(!indTips.hasOwnProperty(data.TipID)){
-								console.log(data.TipID);
-								tipsData.push(new tipInfo(parseInt(data.TipID), data.TipQA, data.TipName, data.TipDescription));
-								indTips[data.TipID] = 1;
-							}*/
+					 		if(!indCloud.hasOwnProperty(data.cloudName)){
+					 			clouds.push(new cloudInstance(data.cloudName, data.ModelAnswerValue));
+					 			indCloud[data.cloudName] = data.ModelAnswerValue;
+					 		}
+					 		if(!indQues.hasOwnProperty(data.quesTitle)){
+					 			QList.push(new quesInstance(data.quesTitle, data.AnswerValue, data.UserNotes));
+					 			indQues[data.quesTitle] =  data.AnswerValue;
+					 		}
+					 		if(QAs.indexOf(data.QA) == -1){
+					 			QAs.push(data.QA);
+					 		}
 						});
+					 	//console.log(clouds);console.log(QList);console.log(QAs);
+						for(var i = 0, len = QList.length; i < len; i++){ //choice = clicked(!)+1
+							var tempString = "For the question: \""+QList[i].title+"\", you answered: \""+QList[i].answer;
+							if(QList[i].comment != ""){
+								tempString += "\", with the comment: \""+QList[i].comment+"\".";
+							} else {
+								tempString += "\" with no comments.";
+							}
+							qDtails.push(tempString);
+						} //console.log(qDtails);
+						makeChart();
+						addListeners();
 					} else {
-						// Stop the rest of the program and stuff TODO
+						$("#chartDiv").css("display", "none");
+						$("#loadFail").css("display", "");
 					}
 				} else {
-					// Stop the rest of the program and stuff TODO
+					$("#chartDiv").css("display", "none");
+					$("#loadFail").css("display", "");
 				}
 			});
-			/*gameID
-			elem.addProperty("cloudName", rs1.getString("cloudName"));
-			elem.addProperty("QualityAttributeID", rs1.getString("QualityAttributeID"));
-			elem.addProperty("ModelAnswerValue", rs1.getString("ModelAnswerValue"));
-			elem.addProperty("quesTitle", rs1.getString("quesTitle"));
-			elem.addProperty("AnswerValue", rs1.getString("AnswerValue"));
-			elem.addProperty("UserNotes", rs1.getString("UserNotes"));
-			elem.addProperty("QA", rs1.getString("QA"));*/
+			
 		}
 	} else {
-		console.log(clouds);
-		console.log(QList);
-		console.log(QAs);
-		for(var i = 0, len = QList.length; i < len; i++){ //choice = clicked(!)+1
+		//console.log(clouds);console.log(QList);console.log(QAs);
+		for(var i = 0, len = QList.length; i < len; i++){
 			var tempString = "For the question: \""+QList[i].title+"\", you answered: \""+QList[i].answer[QList[i].clicked].title;
 			if(QList[i].comment != ""){
 				tempString += "\", with the comment: \""+QList[i].comment+"\".";
@@ -130,8 +101,7 @@ $(document).ready(function() {
 				tempString += "\" with no comments.";
 			}
 			qDtails.push(tempString);
-		}
-		console.log(qDtails);
+		} //console.log(qDtails);
 		makeChart();
 		addListeners();
 	}
@@ -263,6 +233,8 @@ function addListeners(){
 		}
 		myRadarChart.update();
 	});
+	var eButton = document.getElementById('SCSwitch');
+ 	eButton.disabled = false;
 }
 function makeChart(){
 	radarChartData = {
@@ -366,14 +338,22 @@ function switchMode(){
 		$('#heada').html('Here are the questions you answered in this game:');
 	}
 }
-
 function displayCloudStats(num){
 	var cloudText = "<p>Here are the performance of "+myRadarChart.datasets[num].label+": </p><p>";
 	var total = 0;
 	for(var i in myRadarChart.datasets[num].points){
 		cloudText+=myRadarChart.datasets[num].points[i].label+": "+myRadarChart.datasets[num].points[i].value+" <br>";
-		total += myRadarChart.datasets[num].points[i].value
+		total += parseInt(myRadarChart.datasets[num].points[i].value);
 	}
 	cloudText+="</p><p>Total Score: "+total+". Average: "+total/myRadarChart.datasets[num].points.length+". </p>";
 	document.getElementById('cloudDesc').innerHTML = cloudText;
+}
+function cloudInstance(cName, qScore){
+	this.cloud = cName;
+	this.QAScores = qScore.split(",");
+}
+function quesInstance(qName, aName, cMent){
+	this.title = qName;
+	this.answer = aName;
+	this.comment = cMent;
 }

@@ -1460,7 +1460,7 @@ function prepGame(qQues, qClouds){ // Function to run when starting the game.
 	    	sessionStorage.setItem('pieces', JSON.stringify(pieces));
 	    	AList.push.apply(AList, QList);
 	    	sessionStorage.setItem('QList', JSON.stringify(AList));
-	    	window.location = "SpiderChart.html"
+	    	window.location = "SpiderChart.html?gID="+GameID;
 	    } else if(mode == 10){
 	    	if(menuBG.clicked(mousePos.x, mousePos.y, true)){
 	    		if(menuSave.clicked(mousePos.x, mousePos.y, true)){

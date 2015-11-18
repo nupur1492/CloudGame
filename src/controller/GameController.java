@@ -596,7 +596,6 @@ public class GameController extends HttpServlet {
 			while (rs1.next()) {
 				JsonObject elem = new JsonObject(); 
 				elem.addProperty("cloudName", rs1.getString("cloudName"));
-				elem.addProperty("QualityAttributeID", rs1.getString("QualityAttributeID"));
 				elem.addProperty("ModelAnswerValue", rs1.getString("ModelAnswerValue"));
 				elem.addProperty("quesTitle", rs1.getString("quesTitle"));
 				elem.addProperty("AnswerValue", rs1.getString("AnswerValue"));
