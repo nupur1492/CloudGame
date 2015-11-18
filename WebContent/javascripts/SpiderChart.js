@@ -34,27 +34,115 @@ $(document).ready(function() {
 	pcs = sessionStorage.getItem('QList');
 	var QList = $.parseJSON(pcs);
 	
-	console.log(clouds);
-	console.log(QList);
-	console.log(QList[0]);
-	console.log(QList[0].answer);
-	console.log(QAs);
-	
-	for(var i = 0, len = QList.length; i < len; i++){
-		var tempString = "For the question: \""+QList[i].title+"\", you answered: \""+QList[i].answer[QList[i].clicked].title;
-		if(QList[i].comment != ""){
-			tempString += "\", with the comment: \""+QList[i].comment+"\".";
+	if(clouds == null || QAs == null  || QList == null){
+		var query = window.location.search.substring(1);
+		var vars = query.split("&"); 
+		var pair = vars[0].split("=");
+		var ID = pair[1];
+		console.log(ID);console.log(query);console.log(vars);
+		if(ID == null){
+			// Stop the rest of the program and stuff TODO
 		} else {
-			tempString += "\" with no comments.";
+			// TODO grab code from newExising to sort into arrays!
+			
+			var credentials = {
+				fn : 8,
+				gameID: ID
+			};
+			$.post("/CloudGame/gameController", credentials, function(list) {
+				console.log(list);
+				if(list != null){
+					if(list.length > 0){
+						// Cloud: Name and QAScores IN ORDER! TODO edit getEndSummary SP to to this with comma separators using group concat
+						// Question: title, answer, notes
+						// QA: QA in order!
+					 	var indCloud = {}, indQues = {}, cloudData = [], quesData = [];
+					 	$.each(list, function(index, data) {
+							// Make an array that not only has the questions, but clouds, and user data
+							//ModelID, QualityAttributeID, cloudScore
+							if(indCloud.hasOwnProperty(data.ModelID)){
+								if(indCloud[data.ModelID].indexOf(data.QualityAttributeID) == -1){
+									var ind = -1;for(var i = 0; i < cloudData.length; i++){ if(cloudData[i].ModelID == data.ModelID){ind = i; break;}}
+									cloudData[ind].ModelAnswerValue.push(parseInt(data.cloudScore));
+									indCloud[data.ModelID].push(data.QualityAttributeID);
+								}
+							} else {
+								cloudData.push(new cloudInfo(parseInt(data.ModelID))); // TODO: sort this array into one where the scores are in an array (like below)
+								cloudData[cloudData.length-1].ModelAnswerValue.push(parseInt(data.cloudScore));
+								indCloud[data.ModelID] = [data.QualityAttributeID]
+							}
+							//QuestionID, theAnswer, UserNotes, QuestionAsked, QuestionValue, AnswerID, AnswerValue, ModelID, ModelAnswerValue, QualityAttributeName
+							//quesInfo(id, title, qa, notes, asked)
+							if(indQues.hasOwnProperty(data.QuestionID)){
+								if(indQues[data.QuestionID].hasOwnProperty(data.AnswerID)){
+									if(indQues[data.QuestionID][data.AnswerID].indexOf(data.ModelID) == -1){ // Add new ModelID
+										var ind = -1;for(var i = 0; i < quesData.length; i++){ if(quesData[i].QuestionID == data.QuestionID){ind = i; break;}}
+										quesData[ind].AnswerValue.push(parseInt(data.ModelAnswerValue));
+										indQues[data.QuestionID][data.AnswerID].push(data.ModelID);
+									}
+								} else { // Add new answerID and ModelID
+									var ind = -1;for(var i = 0; i < quesData.length; i++){ if(quesData[i].QuestionID == data.QuestionID){ind = i; break;}}
+									quesData[ind].AnswerID.push(parseInt(data.AnswerID));
+									quesData[ind].AnswerTitle.push(parseInt(data.AnswerValue));
+									quesData[ind].AnswerValue.push(parseInt(data.ModelAnswerValue));
+									indQues[data.QuestionID][data.AnswerID] = [data.ModelID];
+								}
+							} else {
+								quesData.push(new quesInfo(parseInt(data.QuestionID), data.QuestionValue, data.QualityAttributeName, data.UserNotes, parseInt(data.QuestionAsked)));
+								if(data.QuestionAsked = 1){quesData[quesData.length-1].choice = parseInt(data.theAnswer);}
+								quesData[quesData.length-1].AnswerID.push(parseInt(data.AnswerID));
+								quesData[quesData.length-1].AnswerTitle.push(parseInt(data.AnswerValue));
+								quesData[quesData.length-1].AnswerValue.push(parseInt(data.ModelAnswerValue));
+								indQues[data.QuestionID] = {};
+								indQues[data.QuestionID][data.AnswerID] = [data.ModelID];
+							}
+							/*if(!indTips.hasOwnProperty(data.TipID)){
+								console.log(data.TipID);
+								tipsData.push(new tipInfo(parseInt(data.TipID), data.TipQA, data.TipName, data.TipDescription));
+								indTips[data.TipID] = 1;
+							}*/
+						});
+					} else {
+						// Stop the rest of the program and stuff TODO
+					}
+				} else {
+					// Stop the rest of the program and stuff TODO
+				}
+			});
+			/*gameID
+			elem.addProperty("cloudName", rs1.getString("cloudName"));
+			elem.addProperty("QualityAttributeID", rs1.getString("QualityAttributeID"));
+			elem.addProperty("ModelAnswerValue", rs1.getString("ModelAnswerValue"));
+			elem.addProperty("quesTitle", rs1.getString("quesTitle"));
+			elem.addProperty("AnswerValue", rs1.getString("AnswerValue"));
+			elem.addProperty("UserNotes", rs1.getString("UserNotes"));
+			elem.addProperty("QA", rs1.getString("QA"));*/
 		}
-		qDtails.push(tempString);
+	} else {
+		console.log(clouds);
+		console.log(QList);
+		console.log(QAs);
+		for(var i = 0, len = QList.length; i < len; i++){ //choice = clicked(!)+1
+			var tempString = "For the question: \""+QList[i].title+"\", you answered: \""+QList[i].answer[QList[i].clicked].title;
+			if(QList[i].comment != ""){
+				tempString += "\", with the comment: \""+QList[i].comment+"\".";
+			} else {
+				tempString += "\" with no comments.";
+			}
+			qDtails.push(tempString);
+		}
+		console.log(qDtails);
+		makeChart();
+		addListeners();
 	}
-	console.log(qDtails);
-//canvasChart.appendTo('body');
-//canvasChart.show();
-
-	makeChart();
-	
+	$('#SCBack').click(function() {
+		window.location = "NewExisting.html"
+	});
+	$('#SCSwitch').click(function() {
+		switchMode();
+	});
+});
+function addListeners(){
 	$('#legend0').click(function() {
 		if(myRadarChart.datasets[0].strokeColor == tea+"1)"){
 			myRadarChart.datasets[0].strokeColor = tea+"0.5)";
@@ -175,14 +263,7 @@ $(document).ready(function() {
 		}
 		myRadarChart.update();
 	});
-	$('#SCBack').click(function() {
-		window.location = "NewExisting.html"
-	});
-	$('#SCSwitch').click(function() {
-		switchMode();
-	});
-});
-
+}
 function makeChart(){
 	radarChartData = {
 			/*labels : [ "Security", "Scalability", "Integrability",

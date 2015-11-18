@@ -9,6 +9,8 @@ var user;
 var playerStartingCoins = 100;
 var loadingGame = false; 
 var tempData;
+var QAIDList = []; 
+var cloudList = [];
 
 angular.module('GameApp', {}) 
 .controller('dataController', function($scope, $sce) {
@@ -26,7 +28,6 @@ angular.module('GameApp', {})
     $scope.sortReverse = false;
     //$scope.$apply();
     $scope.loadGamesData = function() {
-    	var eButton = document.getElementById('existingGame');
         if ($scope.filteredGames == null) {
         	if(user == null || tempData == null){
         		window.location = "login.html";
@@ -37,7 +38,7 @@ angular.module('GameApp', {})
 					LANID: user,
 					pwd: tempData
 			};
-			$.post("/game1.1/gameController", credentials, function(list) {
+			$.post("/CloudGame/gameController", credentials, function(list) {
 				console.log(list);
 				if(list != null){
 					if(list.length > 0){
@@ -48,7 +49,7 @@ angular.module('GameApp', {})
 						});
 					 	$scope.filteredGames = gamesData;
 					 	$scope.$apply();
-					 	eButton.disabled = false;
+						getQA();
 					} else {
 						window.location = "login.html";
 					}
@@ -57,7 +58,7 @@ angular.module('GameApp', {})
 				}
 			});
         } else {
-        	eButton.disabled = false;
+        	getQA();
         }
     }
     $scope.loadGamesData();
@@ -80,7 +81,7 @@ angular.module('GameApp', {})
         		LANID: user,
         		gameID: gameID
 		};
-        $.post("/game1.1/gameController", gameInfo, function(list) {
+        $.post("/CloudGame/gameController", gameInfo, function(list) {
         	if(list != null){
         		console.log(list);
 	        	var indCloud = {}, indQues = {}, cloudData = [], quesData = [];
@@ -174,7 +175,7 @@ angular.module('GameApp', {})
 	    		gameDesc: gameDescription,
 				QAArray : QAString
 			};
-		    $.post("/game1.1/gameController", gameInfo, function(list) {
+		    $.post("/CloudGame/gameController", gameInfo, function(list) {
 		    	console.log(QAString);
 				if(list != null){
 					console.log(list);
@@ -346,5 +347,65 @@ function gameInstance(id, name, description, done){
 		this.completed = "Yes";
 	} else {
 		this.completed = "No";
+	}
+}
+function getQA(){
+	QAIDList = $.parseJSON(sessionStorage.getItem('QAIDList'));
+	if(QAIDList == null || QAIDList.length == 0){
+		QAIDList = [];
+		var credentials = {
+			fn : 6
+		};
+		$.post("/CloudGame/gameController", credentials, function(list) {
+			console.log(list);
+			if(list != null){
+				if(list.length > 0){
+				 	$.each(list, function(index, data) {
+				 		QAIDList[data.id-1] = data.name;
+					});
+				 	console.log(QAIDList);
+				 	sessionStorage.setItem('QAIDList', JSON.stringify(QAIDList));
+				 	getClouds();
+				} else {
+					alert("Unable to load your games. There is a problem with the database.");
+				}
+			} else {
+				alert("Unable to load your games. The database is busy.");
+			}
+		});
+	} else {
+		console.log(QAIDList);
+		getClouds();
+	}
+}
+function getClouds(){
+	cloudList = $.parseJSON(sessionStorage.getItem('cloudList'));
+	if(cloudList == null || cloudList.length == 0){
+		cloudList = [];
+		var credentials = {
+			fn : 7
+		};
+		$.post("/CloudGame/gameController", credentials, function(list) {
+			console.log(list);
+			if(list != null){
+				if(list.length > 0){
+				 	$.each(list, function(index, data) {
+				 		cloudList[data.id-1] = data.name;
+					});
+				 	console.log(cloudList);
+				 	sessionStorage.setItem('cloudList', JSON.stringify(cloudList));
+				 	var eButton = document.getElementById('existingGame');
+				 	eButton.disabled = false;
+				} else {
+					alert("Unable to load your games. There is a problem with the database.");
+				}
+			} else {
+				alert("Unable to load your games. The database is busy.");
+			}
+		});
+	} else {
+		console.log(cloudList);
+		var eButton = document.getElementById('existingGame');
+	 	eButton.disabled = false;
 	}
 }

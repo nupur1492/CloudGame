@@ -18,7 +18,7 @@ var playerCoins = 0; // Coins kept track in the game
 var totalQuestions = 25; 
 var questionAsked = -1; 
 //var gameName = "modernizationProj";
-var cloudList = ["SAAS Public", "SAAS Private", "PAAS Public", "PAAS Private", "IAAS Public", "IAAS Private"];
+//var cloudList = ["SAAS Public", "SAAS Private", "PAAS Public", "PAAS Private", "IAAS Public", "IAAS Private"];
 var cloudGuess = -1; // Used to store the index in the "Guess Which Cloud is First" event
 var positions = []; // Stores the pieces' move information
 var bonusSquares = []; // Stores the location of bonus squares on the board
@@ -35,7 +35,7 @@ var lastEvent = "none";
 var tipsArray = [];
 var ween = false;
 //var QAArray = ["Security", "Scalability", "Integrability", "Availability", "Performance", "Maintainability"];
-var QAIDList = ["Security", "Performance", "Availability", "Integrability", "Scalability", "Maintainability"];
+//var QAIDList = ["Security", "Performance", "Availability", "Integrability", "Scalability", "Maintainability"];
 var pieceNames = ["tea", "blue", "red", "black", "green", "purple"];
 var pieceColors =[
                   {red: "100", green: "120", blue: "0"},
@@ -366,12 +366,12 @@ var eventRight = new screenElem("#000000", "Change Your Bet.png", 1030, 535, 240
 
 // Elements for choosing the cloud to bet on
 var chooseBG = new screenElem("#c2dcd6", null, 190, 245, 1060, 770, false, null, null, null, null, null);
-var cloud1 = new screenElem("#FFFFFF", null, 390, 380, 240, 120, true, cloudList[0], 0, 72, "36px sans-serif", "#001d87"); 
-var cloud2 = new screenElem("#FFFFFF", null, 710, 380, 240, 120, true, cloudList[1], 0, 72, "36px sans-serif", "#001d87");
-var cloud3 = new screenElem("#FFFFFF", null, 1030, 380, 240, 120, true, cloudList[2], 0, 72, "36px sans-serif", "#001d87");
-var cloud4 = new screenElem("#FFFFFF", null, 390, 545, 240, 120, true, cloudList[3], 0, 72, "36px sans-serif", "#001d87"); 
-var cloud5 = new screenElem("#FFFFFF", null, 710, 545, 240, 120, true, cloudList[4], 0, 72, "36px sans-serif", "#001d87");
-var cloud6 = new screenElem("#FFFFFF", null, 1030, 545, 240, 120, true, cloudList[5], 0, 72, "36px sans-serif", "#001d87");
+var cloud1 = new screenElem("#FFFFFF", null, 390, 380, 240, 120, true, "", 0, 72, "36px sans-serif", "#001d87"); 
+var cloud2 = new screenElem("#FFFFFF", null, 710, 380, 240, 120, true, "", 0, 72, "36px sans-serif", "#001d87");
+var cloud3 = new screenElem("#FFFFFF", null, 1030, 380, 240, 120, true, "", 0, 72, "36px sans-serif", "#001d87");
+var cloud4 = new screenElem("#FFFFFF", null, 390, 545, 240, 120, true, "", 0, 72, "36px sans-serif", "#001d87"); 
+var cloud5 = new screenElem("#FFFFFF", null, 710, 545, 240, 120, true, "", 0, 72, "36px sans-serif", "#001d87");
+var cloud6 = new screenElem("#FFFFFF", null, 1030, 545, 240, 120, true, "", 0, 72, "36px sans-serif", "#001d87");
 var clouds = [cloud1, cloud2, cloud3, cloud4, cloud5, cloud6];
 var betText2 = new screenElem("#c2dcd6", null, 710, 730, 480, 50, true, "Your Coins: "+(parseInt(playerCoins)+parseInt(playerStartingCoins)), 0, 30, "bold 36px sans-serif", "#000000");
 var bet1 = new screenElem("#FFFFFF", null, 366, 828, 120, 60, true, "10", 0, 42, "36px sans-serif", "#001d87"); 
@@ -649,6 +649,7 @@ function getMousePos(canvas, evt) {
 	};
 }
 function openHelpMenu(type){ // If type is 1, show the normal help menu, else show the advanced help menu
+	$("#userComments").css("display", "none");
 	dimOut.draw();
 	helpBG.draw();
 	if(type == 1){
@@ -673,6 +674,7 @@ function openHelpMenu(type){ // If type is 1, show the normal help menu, else sh
 	context.textAlign="left"; 
 }
 function openBonusScreen(){
+	$("#userComments").css("display", "none");
 	bonusText1.text = "You have landed on "+bonusCount+" bonus squares!"; 
 	if(bonusCount < 3){
 		bonusText2.text = "The randomly selected event is: ";
@@ -702,6 +704,7 @@ function openBonusScreen(){
 	context.textAlign="left";
 }
 function openBetMenu(type){
+	$("#userComments").css("display", "none");
 	dimOut.draw(); 
 	chooseBG.draw(); //TODO: change what part of bet can be changed based on the int of type
 	welcomeText1.text = "Please select your bet and the type of cloud you think will be the best for your project.";
@@ -726,6 +729,7 @@ function openBetMenu(type){
 	context.textAlign="left";
 }
 function openTextMenu(type){
+	$("#userComments").css("display", "none");
 	if(type == 0){ // facts/tips
 		//call tips stored procedure
 		console.log(tipsFlag);
@@ -740,7 +744,7 @@ function openTextMenu(type){
 		    		fn : 5,
 					QAArray : QAString
 				};
-			$.post("/game1.1/gameController", gameInfo, function(list) {
+			$.post("/CloudGame/gameController", gameInfo, function(list) {
 		    	console.log(QAString);
 				if(list != null){
 				 	$.each(list, function(index, data) {
@@ -802,6 +806,7 @@ function openTextMenu(type){
 	context.textAlign="left";
 }
 function openGuessMenu(){
+	$("#userComments").css("display", "none");
 	cloudGuess = -1;
 	if(modelBet > -1){
 		clouds[modelBet].color = "#FFFFFF";
@@ -829,6 +834,7 @@ function openGuessMenu(){
 	context.textAlign="left";
 }
 function openEndMenu(){
+	$("#userComments").css("display", "none");
 	bonusText2.text = "Hover over the pieces to see which piece is which cloud.";
 	bonusText3.text = positions[0].piece.cloud;
 	bonusTextEnd.text = "(Click anywhere in the game to continue.)";
@@ -893,6 +899,7 @@ function openEndMenu(){
 	// TODO close tab warning if not finished saving
 }
 function openMainMenu(){
+	$("#userComments").css("display", "none");
 	dimOut.draw(); 
 	context.textAlign="center";
 	menuBG.drawResize(false);
@@ -1040,6 +1047,13 @@ function prepGame(qQues, qClouds){ // Function to run when starting the game.
 	questionAsked += AList.length;
 	setBonusSquares(MAX_BONUS_SQUARES);
 	nextQuestion(); 
+	for(var i = 0; i < clouds.length; i++){
+		if(i < cloudList.length){
+			clouds[i].text = cloudList[i];
+		} else {
+			clouds[i].text = "None";
+		}
+	}
 	
 	if(qClouds == null){
 		var tea = new piece("tea", 70, 920,60, "bcs-tea", "100", "120", "0");
@@ -1284,24 +1298,26 @@ function prepGame(qQues, qClouds){ // Function to run when starting the game.
 	    	if(chooseBG.clicked(mousePos.x, mousePos.y, false)){
 	    		for(var i in clouds){
 	    			if(clouds[i].clicked(mousePos.x, mousePos.y, true)){
-	    				if(modelBet != -1){
-	    					clouds[modelBet].color = "#FFFFFF";
-	    					clouds[modelBet].fontColor = "#001d87";
-	                		context.textAlign = "center";
-	        				clouds[modelBet].drawResize(true);
-	                		context.textAlign = "left";
-	    				}
-	    				if(modelBet != i){
-	        				clouds[i].color = "#001d87";
-	        				clouds[i].fontColor = "#FFFFFF";
-	        				context.textAlign = "center";
-	        				clouds[i].drawResize(true);
-	        				context.textAlign = "left";
-	        				modelBet = i;
-	        				break;
-	    				} else {
-	    					modelBet = -1;
-	    					break;
+	    				if(i < cloudList.length){
+		    				if(modelBet != -1){
+		    					clouds[modelBet].color = "#FFFFFF";
+		    					clouds[modelBet].fontColor = "#001d87";
+		                		context.textAlign = "center";
+		        				clouds[modelBet].drawResize(true);
+		                		context.textAlign = "left";
+		    				}
+		    				if(modelBet != i){
+		        				clouds[i].color = "#001d87";
+		        				clouds[i].fontColor = "#FFFFFF";
+		        				context.textAlign = "center";
+		        				clouds[i].drawResize(true);
+		        				context.textAlign = "left";
+		        				modelBet = i;
+		        				break;
+		    				} else {
+		    					modelBet = -1;
+		    					break;
+		    				}
 	    				}
 	    			}
 	    		}
@@ -1654,7 +1670,7 @@ function saveGame(){
 		gameInfo.completed = 1;
 	}
 	console.log(gameInfo);
-	$.post("/game1.1/gameController", gameInfo, function(list) {
+	$.post("/CloudGame/gameController", gameInfo, function(list) {
 		console.log(list);
 		if(list != null){
 			currentSave += 1;
@@ -1693,7 +1709,7 @@ function emergencySaveGame(){ // In case the DB doesn't respond, we want to save
 		gameInfo.completed = 1;
 	}
 	console.log(gameInfo);
-	$.post("/game1.1/gameController", gameInfo, function(list) {
+	$.post("/CloudGame/gameController", gameInfo, function(list) {
 		if(list != null){ 
 			currentSave += 1;
 			if(currentSave < qString.length && qString[currentSave+1] == ""){

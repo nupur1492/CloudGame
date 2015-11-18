@@ -113,6 +113,22 @@ public class GameController extends HttpServlet {
 
 			out.write(gson.toJson(getTips(qaArray)));
 		}
+		
+		/*************** call QA stored procedure ***************/
+		else if (fn.equals("6")) {
+			out.write(gson.toJson(spGetAllQA()));
+		}
+		
+		/*************** call QA stored procedure ***************/
+		else if (fn.equals("7")) {
+			out.write(gson.toJson(spGetAllClouds()));
+		}
+		
+		/*************** call End Game Summary stored procedure ***************/
+		else if (fn.equals("8")) {
+			String gameId = request.getParameter("gameID");
+			out.write(gson.toJson(spGetEndSummary(gameId)));
+		}
 
 	} // end of doGet
 
@@ -442,6 +458,178 @@ public class GameController extends HttpServlet {
 		return null;
 	}
 
+	/************** get QA ***********/
+
+	private static JsonArray spGetAllQA() {
+		Connection conn = null;
+		CallableStatement cStmt = null;
+		JsonArray array = new JsonArray();
+		ResultSet rs1;
+
+		try {
+			Class.forName(JDBC_DRIVER);
+			System.out.println("Connecting to database...");
+			conn = DriverManager.getConnection(DB_URL, USER, PASS);
+			Gson gson = new GsonBuilder().setPrettyPrinting().serializeNulls()
+					.setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE).create();
+			cStmt = conn.prepareCall("{CALL spGetAllQA()}");
+			System.out.println(cStmt);
+			cStmt.execute();
+			rs1 = cStmt.getResultSet();
+
+			while (rs1.next()) {
+				JsonObject elem = new JsonObject();
+				elem.addProperty("id", rs1.getString("QualityAttributeID"));
+				elem.addProperty("name", rs1.getString("QualityAttributeName"));
+				elem.addProperty("description", rs1.getString("QualityAttributeDescription"));
+				/*elem.addProperty("TipID", rs1.getString("TipID"));
+				elem.addProperty("TipName", rs1.getString("TipName"));
+				elem.addProperty("TipDescription", rs1.getString("TipDescription"));
+				elem.addProperty("TipQA", rs1.getString("TipQA"));*/
+				array.add(elem);
+			}
+
+			rs1.close();
+			cStmt.close();
+			conn.close();
+			return array;
+
+		} catch (SQLException se) {
+			se.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (cStmt != null)
+					cStmt.close();
+			} catch (SQLException se2) {
+			}
+			try {
+				if (conn != null) {
+					conn.close();
+				}
+			} catch (SQLException se) {
+				se.printStackTrace();
+			}
+		}
+		return null;
+	}
+	
+	
+	/************** get clouds ***********/
+
+	private static JsonArray spGetAllClouds() {
+		Connection conn = null;
+		CallableStatement cStmt = null;
+		JsonArray array = new JsonArray();
+		ResultSet rs1;
+
+		try {
+			Class.forName(JDBC_DRIVER);
+			System.out.println("Connecting to database...");
+			conn = DriverManager.getConnection(DB_URL, USER, PASS);
+			Gson gson = new GsonBuilder().setPrettyPrinting().serializeNulls()
+					.setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE).create();
+			cStmt = conn.prepareCall("{CALL spGetAllClouds()}");
+			System.out.println(cStmt);
+			cStmt.execute();
+			rs1 = cStmt.getResultSet();
+
+			while (rs1.next()) {
+				JsonObject elem = new JsonObject();
+				elem.addProperty("id", rs1.getString("ModelID"));
+				elem.addProperty("name", rs1.getString("ModelName"));
+				elem.addProperty("description", rs1.getString("ModelDescription"));
+				/*elem.addProperty("TipID", rs1.getString("TipID"));
+				elem.addProperty("TipName", rs1.getString("TipName"));
+				elem.addProperty("TipDescription", rs1.getString("TipDescription"));
+				elem.addProperty("TipQA", rs1.getString("TipQA"));*/
+				array.add(elem);
+			}
+
+			rs1.close();
+			cStmt.close();
+			conn.close();
+			return array;
+
+		} catch (SQLException se) {
+			se.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (cStmt != null)
+					cStmt.close();
+			} catch (SQLException se2) {
+			}
+			try {
+				if (conn != null) {
+					conn.close();
+				}
+			} catch (SQLException se) {
+				se.printStackTrace();
+			}
+		}
+		return null;
+	}
+	
+	/************** load saved game ***********/
+
+	private static JsonArray spGetEndSummary(String gameid) {
+		Connection conn = null;
+		CallableStatement cStmt = null;
+		JsonArray array = new JsonArray();
+		ResultSet rs1;
+		try {
+			Class.forName(JDBC_DRIVER);
+			System.out.println("Connecting to database...");
+			conn = DriverManager.getConnection(DB_URL, USER, PASS);
+			Gson gson = new GsonBuilder().setPrettyPrinting().serializeNulls()
+					.setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE).create();
+
+			cStmt = conn.prepareCall("{CALL spGetEndSummary(?)}");
+			System.out.println(cStmt);
+			cStmt.setInt(1, Integer.parseInt(gameid));
+			cStmt.execute();
+			rs1 = cStmt.getResultSet();
+
+			while (rs1.next()) {
+				JsonObject elem = new JsonObject(); 
+				elem.addProperty("cloudName", rs1.getString("cloudName"));
+				elem.addProperty("QualityAttributeID", rs1.getString("QualityAttributeID"));
+				elem.addProperty("ModelAnswerValue", rs1.getString("ModelAnswerValue"));
+				elem.addProperty("quesTitle", rs1.getString("quesTitle"));
+				elem.addProperty("AnswerValue", rs1.getString("AnswerValue"));
+				elem.addProperty("UserNotes", rs1.getString("UserNotes"));
+				elem.addProperty("QA", rs1.getString("QA"));
+				array.add(elem);
+			}
+
+			rs1.close();
+			cStmt.close();
+			conn.close();
+			return array;
+
+		} catch (SQLException se) {
+			se.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				if (cStmt != null)
+					cStmt.close();
+			} catch (SQLException se2) {
+			}
+			try {
+				if (conn != null) {
+					conn.close();
+				}
+			} catch (SQLException se) {
+				se.printStackTrace();
+			}
+		}
+		return null;
+	}
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
 	 *      response)
